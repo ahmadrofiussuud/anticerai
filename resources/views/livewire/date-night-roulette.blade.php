@@ -117,14 +117,15 @@
         </div>
     </div>
 
-            <!-- Activity Categories -->
-            <div class="border-t-2 border-[#E5E0D0] pt-16">
-                <div class="text-center mb-12">
-                    <h3 class="text-3xl lg:text-4xl font-serif font-bold text-[#2A3C2A] mb-3">Browse All Activities</h3>
-                    <p class="text-[#6B7C6B] text-lg">Or choose an activity manually</p>
-                </div>
+    <!-- Activity Categories -->
+    <div class="border-t-2 border-[#E5E0D0] pt-16">
+        <div class="max-w-7xl mx-auto px-6 lg:px-12">
+            <div class="text-center mb-12">
+                <h3 class="text-3xl lg:text-4xl font-serif font-bold text-[#2A3C2A] mb-3">Browse All Activities</h3>
+                <p class="text-[#6B7C6B] text-lg">Or choose an activity manually</p>
+            </div>
 
-                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                     @foreach($activities as $activity)
                         <button 
                             wire:click="selectActivity({{ $activity['id'] }})"
@@ -149,7 +150,8 @@
                         </button>
                     @endforeach
                 </div>
-            </div>
+        </div>
+    </div>
         @else
             <!-- Selected Activity Display -->
             <div class="max-w-4xl mx-auto">
