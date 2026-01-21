@@ -14,6 +14,7 @@ class Couple extends Model
         'wife_id',
         'pairing_code',
         'anniversary_date',
+        'current_plan_id',
     ];
 
     protected $casts = [
@@ -28,5 +29,15 @@ class Couple extends Model
     public function wife()
     {
         return $this->belongsTo(User::class, 'wife_id');
+    }
+
+    public function memories()
+    {
+        return $this->hasMany(Memory::class);
+    }
+
+    public function currentPlan()
+    {
+        return $this->belongsTo(Activity::class, 'current_plan_id');
     }
 }

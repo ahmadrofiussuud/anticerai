@@ -36,53 +36,64 @@ new #[Layout('layouts.guest')] class extends Component
     }
 }; ?>
 
-<div>
-    <form wire:submit="register">
+<div class="animate-fade-in-up">
+    <h2 class="text-2xl font-bold text-stone-800 text-center mb-2">Join Anticerai</h2>
+    <p class="text-stone-500 text-center mb-6 text-sm">Create an account to start your journey.</p>
+
+    <form wire:submit="register" class="space-y-4">
         <!-- Name -->
         <div>
-            <x-input-label for="name" :value="__('Name')" />
-            <x-text-input wire:model="name" id="name" class="block mt-1 w-full" type="text" name="name" required autofocus autocomplete="name" />
+            <label for="name" class="block text-sm font-semibold text-stone-600 mb-1">Name</label>
+            <div class="relative">
+                <input wire:model="name" id="name" type="text" name="name" required autofocus autocomplete="name"
+                    class="block w-full px-4 py-2.5 border border-stone-200 rounded-xl leading-5 bg-stone-50 placeholder-stone-400 focus:outline-none focus:bg-white focus:ring-2 focus:ring-primary-400 focus:border-primary-400 sm:text-sm transition duration-150 ease-in-out">
+            </div>
             <x-input-error :messages="$errors->get('name')" class="mt-2" />
         </div>
 
         <!-- Email Address -->
-        <div class="mt-4">
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input wire:model="email" id="email" class="block mt-1 w-full" type="email" name="email" required autocomplete="username" />
+        <div>
+            <label for="email" class="block text-sm font-semibold text-stone-600 mb-1">Email</label>
+            <div class="relative">
+                <input wire:model="email" id="email" type="email" name="email" required autocomplete="username"
+                    class="block w-full px-4 py-2.5 border border-stone-200 rounded-xl leading-5 bg-stone-50 placeholder-stone-400 focus:outline-none focus:bg-white focus:ring-2 focus:ring-primary-400 focus:border-primary-400 sm:text-sm transition duration-150 ease-in-out">
+            </div>
             <x-input-error :messages="$errors->get('email')" class="mt-2" />
         </div>
 
         <!-- Password -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')" />
-
-            <x-text-input wire:model="password" id="password" class="block mt-1 w-full"
-                            type="password"
-                            name="password"
-                            required autocomplete="new-password" />
-
+        <div>
+            <label for="password" class="block text-sm font-semibold text-stone-600 mb-1">Password</label>
+            <div class="relative">
+                <input wire:model="password" id="password" type="password" name="password" required autocomplete="new-password"
+                    class="block w-full px-4 py-2.5 border border-stone-200 rounded-xl leading-5 bg-stone-50 placeholder-stone-400 focus:outline-none focus:bg-white focus:ring-2 focus:ring-primary-400 focus:border-primary-400 sm:text-sm transition duration-150 ease-in-out">
+            </div>
             <x-input-error :messages="$errors->get('password')" class="mt-2" />
         </div>
 
         <!-- Confirm Password -->
-        <div class="mt-4">
-            <x-input-label for="password_confirmation" :value="__('Confirm Password')" />
-
-            <x-text-input wire:model="password_confirmation" id="password_confirmation" class="block mt-1 w-full"
-                            type="password"
-                            name="password_confirmation" required autocomplete="new-password" />
-
+        <div>
+            <label for="password_confirmation" class="block text-sm font-semibold text-stone-600 mb-1">Confirm Password</label>
+            <div class="relative">
+                <input wire:model="password_confirmation" id="password_confirmation" type="password" name="password_confirmation" required autocomplete="new-password"
+                    class="block w-full px-4 py-2.5 border border-stone-200 rounded-xl leading-5 bg-stone-50 placeholder-stone-400 focus:outline-none focus:bg-white focus:ring-2 focus:ring-primary-400 focus:border-primary-400 sm:text-sm transition duration-150 ease-in-out">
+            </div>
             <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
         </div>
 
-        <div class="flex items-center justify-end mt-4">
-            <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('login') }}" wire:navigate>
-                {{ __('Already registered?') }}
-            </a>
-
-            <x-primary-button class="ms-4">
+        <div class="mt-6">
+            <button type="submit" class="w-full flex justify-center py-3 px-4 border border-transparent rounded-xl shadow-lg text-sm font-bold text-white bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-all transform hover:scale-[1.02] active:scale-95">
                 {{ __('Register') }}
-            </x-primary-button>
+            </button>
+        </div>
+
+        <div class="mt-6 text-center">
+            <p class="text-sm text-stone-500">
+                Already registered? 
+                <a href="{{ route('login') }}" class="font-bold text-stone-700 hover:text-black transition-colors" wire:navigate>
+                    Log in
+                </a>
+            </p>
         </div>
     </form>
 </div>

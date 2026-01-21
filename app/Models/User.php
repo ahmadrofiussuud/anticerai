@@ -22,6 +22,10 @@ class User extends Authenticatable
         'email',
         'password',
         'couple_id',
+        'love_language',
+        'favorites',
+        'pairing_code',
+        'pairing_code_expires_at',
     ];
 
     /**
@@ -50,5 +54,15 @@ class User extends Authenticatable
     public function couple()
     {
         return $this->belongsTo(Couple::class);
+    }
+
+    public function energyLogs()
+    {
+        return $this->hasMany(EnergyLog::class);
+    }
+
+    public function savedInsights()
+    {
+        return $this->belongsToMany(Insight::class, 'insight_user')->withTimestamps();
     }
 }
