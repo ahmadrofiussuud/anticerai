@@ -12,6 +12,7 @@ class PairingManager extends Component
 {
     public $pairingCode = '';
     public $partnerCode = '';
+    public $myRole = 'husband'; // Default role
     public $showCodeInput = false;
 
     public function generatePairingCode()
@@ -60,9 +61,21 @@ class PairingManager extends Component
         }
 
         // Create couple
-        $couple = Couple::create([
-            'name' => auth()->user()->name . ' & ' . $partner->name,
-        ]);
+        if ($this->myRole === 'husband') {
+            $couple = Couple::create([
+                'name' => auth()->user()->name . ' & ' . $partner->name,
+                'husband_id' => auth()->id(),
+                'wife_id' => $partner->id,
+                'pairing_code' => $this->partnerCode, // Store used code or random
+            ]);
+        } else {
+            $couple = Couple::create([
+                'name' => $partner->name . ' & ' . auth()->user()->name,
+                'husband_id' => $partner->id,
+                'wife_id' => auth()->id(),
+                'pairing_code' => $this->partnerCode,
+            ]);
+        }
 
         // Assign couple_id to both users
         auth()->user()->update(['couple_id' => $couple->id]);
@@ -73,7 +86,7 @@ class PairingManager extends Component
         ]);
 
         session()->flash('success', 'Successfully paired with ' . $partner->name . '!');
-        return redirect()->route('home');
+        return redirect()->to('/home'); // Use redirect()->to or redirect()->route if exists
     }
 
     public function cancelPairingCode()

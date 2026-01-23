@@ -15,16 +15,20 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-
+        // Create test user for quick testing
         User::factory()->create([
             'name' => 'Test User',
             'email' => 'test@example.com',
         ]);
 
+        // Run all seeders in order
         $this->call([
-            ActivitySeeder::class,
-            InsightSeeder::class,
+            TestAccountSeeder::class,    // Create test couples and users
+            ActivitySeeder::class,        // Create activities catalog
+            InsightSeeder::class,         // Create insights
+            MemorySeeder::class,          // Create nostalgia/memories
+            DailyLogSeeder::class,        // Create daily logs (kabar hari ini)
+            GrowthMaterialSeeder::class,  // Create growth materials
         ]);
     }
 }

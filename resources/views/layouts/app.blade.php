@@ -16,6 +16,39 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body class="font-sans antialiased text-slate-800 bg-slate-50">
+        <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+        <script type="module">
+            import mermaid from "https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.esm.min.mjs";
+            mermaid.initialize({ 
+                startOnLoad: false, 
+                theme: 'base',
+                themeVariables: {
+                    primaryColor: '#4A6741',
+                    lineColor: '#C67C5C',
+                    tertiaryColor: '#FDFBF7'
+                }
+            });
+            window.mermaid = mermaid;
+        </script>
+        <script>
+            function decodeHtmlEntities(text) {
+                var textArea = document.createElement('textarea');
+                textArea.innerHTML = text;
+                return textArea.value;
+            }
+
+            window.renderMarkdown = function(text) {
+                if (typeof marked === 'undefined') return text;
+                const renderer = new marked.Renderer();
+                renderer.code = function({ text, lang }) {
+                    if (lang === 'mermaid') {
+                        return '<div class="mermaid">' + decodeHtmlEntities(text) + '</div>';
+                    }
+                    return '<pre><code class="language-' + lang + '">' + text + '</code></pre>';
+                };
+                return marked.parse(text, { renderer: renderer });
+            }
+        </script>
         <div class="min-h-screen relative overflow-x-hidden bg-[#FAFAFA]">
              <!-- Subtle Warm Noise/Gradient Overlay -->
             <div class="fixed inset-0 z-[-1] opacity-60 pointer-events-none" style="background: radial-gradient(circle at 0% 0%, #fff1f2 0%, transparent 50%), radial-gradient(circle at 100% 100%, #fffbeb 0%, transparent 50%);"></div>

@@ -17,7 +17,7 @@ class InvisibleBridge extends Component
         $this->messages = [
             [
                 'type' => 'system',
-                'content' => 'Welcome to Invisible Bridge. Share your feelings and I\'ll help you communicate better with your partner using Non-Violent Communication.'
+                'content' => 'Selamat datang di Invisible Bridge. Ceritakan apa yang kamu rasakan, aku siap mendengarkan dan membantu mencari solusi psikologis untuk hubunganmu.'
             ]
         ];
     }
@@ -34,15 +34,38 @@ class InvisibleBridge extends Component
             'content' => $this->userMessage
         ];
 
+        // Clear input and set loading state
         $userInput = $this->userMessage;
         $this->userMessage = '';
         $this->isLoading = true;
 
-        // Simulate AI response (you can integrate with Amora service here)
-        $this->messages[] = [
-            'type' => 'amora',
-            'content' => 'NVC suggestion: try expressing your feelings and needs. "I feel sad when I am not listened to because I need understanding."'
-        ];
+        // Trigger AI response generation asynchronously
+        $this->dispatch('generate-ai-response', userInput: $userInput);
+    }
+
+    #[\Livewire\Attributes\On('generate-ai-response')]
+    public function generateAIResponse($userInput, \App\Services\AmoraService $amoraService)
+    {
+        try {
+            $response = $amoraService->chatWithPsychologist($userInput, $this->messages);
+            
+            if ($response && isset($response['reply'])) {
+                $this->messages[] = [
+                    'type' => 'amora',
+                    'content' => $response['reply']
+                ];
+            } else {
+                $this->messages[] = [
+                    'type' => 'system',
+                    'content' => 'Maaf, saya sedang kesulitan terhubung. Coba lagi nanti ya.'
+                ];
+            }
+        } catch (\Exception $e) {
+            $this->messages[] = [
+                'type' => 'system',
+                'content' => 'Terjadi kesalahan sistem.'
+            ];
+        }
 
         $this->isLoading = false;
     }

@@ -8,15 +8,10 @@ new class extends Component
     /**
      * Log the current user out of the application.
      */
-    public function logout(Logout $logout): void
-    {
-        $logout();
-
-        $this->redirect('/', navigate: true);
-    }
+    // Logout logic moved to standard POST route 'logout'
 }; ?>
 
-<nav x-data="{ open: false }" class="bg-[#2C3E2C] border-b border-[#3A4A3A] shadow-sm">
+<nav x-data="{ open: false }" class="bg-[#2C3E2C] border-b border-[#3A4A3A] shadow-sm relative z-50">
     <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between items-center h-16">
@@ -71,11 +66,14 @@ new class extends Component
                         </x-dropdown-link>
 
                         <!-- Authentication -->
-                        <button wire:click="logout" class="w-full text-start">
-                            <x-dropdown-link>
+                        <form method="POST" action="{{ route('logout') }}" class="w-full">
+                            @csrf
+                            <x-dropdown-link :href="route('logout')"
+                                    onclick="event.preventDefault();
+                                                this.closest('form').submit();">
                                 {{ __('Log Out') }}
                             </x-dropdown-link>
-                        </button>
+                        </form>
                     </x-slot>
                 </x-dropdown>
             </div>
@@ -116,9 +114,14 @@ new class extends Component
                 </a>
 
                 <!-- Authentication -->
-                <button wire:click="logout" class="w-full text-start block px-4 py-2 text-base font-medium text-[#B5C4B5] hover:text-[#FDFBF7] hover:bg-[#3A4A3A]/50 transition-colors">
-                    {{ __('Log Out') }}
-                </button>
+                <!-- Authentication -->
+                <form method="POST" action="{{ route('logout') }}" class="w-full">
+                    @csrf
+                    <button type="submit" 
+                            class="w-full text-start block px-4 py-2 text-base font-medium text-[#B5C4B5] hover:text-[#FDFBF7] hover:bg-[#3A4A3A]/50 transition-colors">
+                        {{ __('Log Out') }}
+                    </button>
+                </form>
             </div>
         </div>
     </div>

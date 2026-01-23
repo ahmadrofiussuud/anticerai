@@ -51,11 +51,17 @@ class EnergyMeter extends Component
 
         // Only show status from last 24 hours
         if (!$log || $log->created_at->diffInHours(now()) > 24) {
+             // DUMMY DATA FOR DEMO
             return [
-                'level' => 0,
-                'message' => "Waiting for partner's update...",
-                'color' => 'gray',
-                'updated_at' => null // Fixed missing key
+                'level' => 3,
+                'message' => "Lagi santai sambil baca buku di kamar.",
+                'color' => 'green',
+                'updated_at' => 'Baru saja',
+                'ai_advice' => [
+                    'advice_title' => 'Quality Time',
+                    'advice_detail' => 'Bawakan teh hangat, dia sedang butuh time-alone yang berkualitas.',
+                    'effort_level' => 'Ringan'
+                ],
             ];
         }
 
@@ -74,12 +80,20 @@ class EnergyMeter extends Component
             $color = 'green';
         }
 
+        // Get AI Advice based on partner's latest activities
+        $partnerLog = \App\Models\DailyLog::where('user_id', $partnerId)->latest()->first();
+        $aiAdvice = null;
+        if ($partnerLog) {
+            $aiAdvice = \Illuminate\Support\Facades\Cache::get('partner_analysis_' . $couple->id . '_' . $partnerId);
+        }
+
         return [
             'level' => $level,
             'message' => $message,
             'note' => $log->note,
             'color' => $color,
             'updated_at' => $log->created_at->diffForHumans(),
+            'ai_advice' => $aiAdvice,
         ];
     }
 

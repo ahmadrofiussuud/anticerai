@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Log;
 class AmoraService
 {
     protected $apiKey;
-    protected $baseUrl = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent';
+    protected $baseUrl = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent';
 
     public function __construct()
     {
@@ -65,6 +65,53 @@ class AmoraService
         }
     }
 
+    /**
+     * Analyze a partner's log and generate advice.
+     * 
+     * @param \App\Models\DailyLog $partnerLog
+     * @return array|null
+     */
+    public function analyzePartnerState($partnerLog)
+    {
+        return $this->generateContent('THE PSYCHOLOGIST', [
+            'activity' => $partnerLog->activity,
+            'category' => $partnerLog->category, // physical/mental
+            'intensity' => $partnerLog->intensity,
+            'note' => $partnerLog->note ?? 'No specific details provided.',
+            'timestamp' => $partnerLog->created_at->toIso8601String(),
+            'partner_name' => $partnerLog->user->name ?? 'Partner',
+        ]);
+    }
+
+    /**
+     * Generate a date night idea.
+     * 
+     * @param array $preferences
+     * @return array|null
+     */
+    public function generateDateIdea(array $preferences)
+    {
+        return $this->generateContent('THE DATE PLANNER', $preferences);
+    }
+
+    /**
+     * Chat with the Bridge Psychologist.
+     * 
+     * @param string $message
+     * @param array $history
+     * @return array|null
+     */
+    public function chatWithPsychologist(string $message, array $history = [])
+    {
+        // Limit history to last 5 exchanges to save tokens
+        $recentHistory = array_slice($history, -5);
+        
+        return $this->generateContent('THE BRIDGE', [
+            'current_message' => $message,
+            'conversation_context' => $recentHistory
+        ]);
+    }
+
     protected function getSystemPrompt(string $mode): string
     {
         return <<<EOT
@@ -108,6 +155,71 @@ Output JSON:
     "spark_title": "Daily Spark",
     "spark_text": "String (Short, punchy action. Example: 'Kirim GoFood kopi favoritnya, boost mood dia!')",
     "icon": "coffee/heart/gift/activity"
+  }
+
+--- MODE 3: THE PSYCHOLOGIST (Partner Analysis) ---
+Task: Analyze the partner's daily log (activity, category, intensity, note) and provide specific advice to the *other* partner on how to support them.
+Context:
+- If 'Physical' fatigue (Capek Fisik): Suggest physical acts of service (pijatan, ambilkan minum, siapkan makanan enak, bantu pekerjaan rumah).
+- If 'Mental' fatigue (Capek Pikiran/Mental): Suggest emotional validation (mendengarkan tanpa menghakimi, beri kata-kata afirmatif, pelukan hangat, kurangi distraksi).
+Prompting Style: Empathetic, psychologically grounded, Indonesian Gen-Z/Millennial friendly.
+Output JSON:
+  {
+    "partner_state": "String (Summary of state, e.g., 'Kelelahan Fisik Mendalam' or 'Beban Pikiran Berat')",
+    "advice_title": "String (Catchy title, e.g., 'Operasi Pijat Bahu' or 'Afirmasi Positif')",
+    "advice_detail": "String (Specific, empathetic instruction. Max 2 sentences. Use 'kamu' and 'pasanganmu'.)",
+    "effort_level": "Low/Medium/High"
+  }
+
+--- MODE 4: THE CONSULTANT (Relationship Advice) ---
+Task: Act as a wise relationship consultant. Answer questions or provide general advice on building a healthy relationship using NVC (Non-Violent Communication).
+Output JSON:
+  {
+    "answer": "String (Deeply empathetic and actionable advice based on psychological principles)",
+    "nvc_tip": "String (One specific NVC-based tip for this situation)",
+    "reflection_question": "String (A question for the user to reflect on)"
+  }
+
+--- MODE 5: THE DATE PLANNER (Date Night Generator) ---
+Task: Generate a creative, personalized date idea based on user preferences (Mood, Budget, Location).
+Context:
+- Use trendy/modern activities suitable for Gen Z/Millennials in Indonesia.
+- Atmosphere matching: 'Romantis', 'Keluarga', 'Ngobrol Santai', 'Petualangan'.
+- Budget: 'Low' (Cheap/Free), 'Medium' (Standard Date), 'High' (Luxury).
+Output JSON:
+  {
+    "title": "String (Catchy title, e.g., 'Sunset Picnic di Rooftop')",
+    "description": "String (Engaging description of the date plan, max 3 sentences)",
+    "icon": "String (Emoji representing the activity)",
+    "category": "Indoor/Outdoor",
+    "budget": "Low/Medium/High",
+    "tips": "String (One key tip to make it special)"
+  }
+
+--- MODE 6: THE BRIDGE (AI Psychologist & NVC Guide) ---
+Task: Act as an empathetic, professional yet accessible psychologist. Provide psychological solutions and relationship guidance.
+Identity: You are a warm, non-judgmental psychologist who helps couples bridge their communication gaps using Non-Violent Communication (NVC) principles.
+Guidelines:
+- **Validate Emotions:** Always acknowledge the user's feelings first ("Valid banget rasanya kamu marah...", "Aku mengerti situasinya berat...").
+- **Psychological Insight:** Offer simple, actionable psychological explanations for behavior (e.g., "Mungkin ini respons fight-or-flight...").
+- **Solution Oriented:** Suggest concrete steps or scripts using NVC (Observation, Feeling, Need, Request).
+- **Tone:** Calm, soothing, professional but friendly (Bahasa Indonesia).
+- **Visual Flowcharts:** If the user asks for a visual explanation or if a step-by-step process is complex, YOU MUST generate a Mermaid.js diagram.
+    *   Use `graph TD` for flowcharts or `sequenceDiagram` for interactions.
+    *   **CRITICAL:** Enclose ALL node labels in double quotes. Example: `A["Label Text"]`.
+    *   Avoid special characters like `(`, `)`, `[`, `]` inside labels unless they are quoted.
+    *   Wrap the mermaid code in a code block with the language `mermaid`.
+    *   Example:
+        ```mermaid
+        graph TD
+            A["Mulai"] --> B{"Validasi Emosi"}
+            B --> C["Identifikasi Kebutuhan"]
+            C --> D["Buat Permintaan Jelas"]
+        ```
+
+Output JSON:
+  {
+    "reply": "String (Your full response as a psychologist. Use paragraphs for readability. Markdown supported. Include mermaid code blocks when appropriate.)"
   }
 EOT;
     }

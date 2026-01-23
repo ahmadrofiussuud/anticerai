@@ -1,4 +1,7 @@
-<div class="min-h-screen bg-[#FDFBF7]">
+<div class="min-h-screen bg-cover bg-center bg-fixed relative" style="background-image: url('https://images.unsplash.com/photo-1518621736915-f3b1c41bfd00?q=80&w=2540&auto=format&fit=crop');">
+    <div class="min-h-screen bg-[#FDFBF7]/80 backdrop-blur-sm">
+
+
     <!-- Hero Section with Gradient -->
     <div class="bg-gradient-to-r from-[#C67C5C] to-[#D89A7A] text-white py-8 shadow-lg">
         <div class="max-w-4xl mx-auto px-4 text-center">
@@ -9,9 +12,14 @@
 
     <!-- Chat Container -->
     <div class="max-w-4xl mx-auto px-4 py-8">
-        <div class="bg-white rounded-3xl shadow-xl border border-[#E5E0D0] overflow-hidden" style="height: calc(100vh - 280px);">
+        <div class="bg-white rounded-3xl shadow-xl border border-[#E5E0D0] overflow-hidden relative" style="height: calc(100vh - 280px);">
+            <!-- Subtle Interior Pattern -->
+            <div class="absolute inset-0 opacity-[0.35] pointer-events-none bg-repeat bg-[length:400px]" 
+                 style="background-image: url('https://images.unsplash.com/photo-1574169208507-84376144848b?q=80&w=2079&auto=format&fit=crop');">
+            </div>
+
             <!-- Messages Area -->
-            <div class="h-full flex flex-col">
+            <div class="h-full flex flex-col relative z-10">
                 <div class="flex-1 overflow-y-auto p-6 space-y-4">
                     @foreach($messages as $message)
                         @if($message['type'] === 'user')
@@ -30,7 +38,20 @@
                                 <div class="max-w-md">
                                     <div class="bg-[#2C3E2C] text-[#E8E6D9] rounded-2xl rounded-tl-sm px-5 py-3 shadow-md">
                                         <div class="text-xs font-bold mb-1 text-[#B5C4B5]">Amora AI</div>
-                                        <p class="text-sm leading-relaxed">{{ $message['content'] }}</p>
+                                        <div class="text-sm leading-relaxed" 
+                                             x-data="{ content: @js($message['content']) }"
+                                             x-init="
+                                                $el.innerHTML = window.renderMarkdown(content);
+                                                if (window.mermaid) {
+                                                    setTimeout(() => {
+                                                        const nodes = $el.querySelectorAll('.mermaid');
+                                                        if (nodes.length > 0) {
+                                                            window.mermaid.run({ nodes: nodes });
+                                                        }
+                                                    }, 100);
+                                                }
+                                             ">
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -85,5 +106,6 @@
                 </div>
             </div>
         </div>
+    </div>
     </div>
 </div>

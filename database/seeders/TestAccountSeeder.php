@@ -37,14 +37,23 @@ class TestAccountSeeder extends Seeder
         $couple = Couple::create([
             'husband_id' => $husband->id,
             'wife_id' => $wife->id,
-            'pairing_code' => 'COUPLE', // Static code for testing
+            'pairing_code' => 'ABCD1234', // Static code for all
             'anniversary_date' => Carbon::now()->subYears(2),
         ]);
 
-        $husband->update(['couple_id' => $couple->id]);
-        $wife->update(['couple_id' => $couple->id]);
+        // Clear pairing codes after pairing to avoid unique constraint
+        $husband->update([
+            'couple_id' => $couple->id,
+            'pairing_code' => null,
+            'pairing_code_expires_at' => null,
+        ]);
+        $wife->update([
+            'couple_id' => $couple->id,
+            'pairing_code' => null,
+            'pairing_code_expires_at' => null,
+        ]);
 
-        // 2. Create Unpaired Users
+        // 2. Create Unpaired Users (they will get ABCD1234 from User model boot)
         $budi = User::create([
             'name' => 'Budi (Belum Pasangan)',
             'email' => 'budi@example.com',
@@ -55,7 +64,6 @@ class TestAccountSeeder extends Seeder
             'name' => 'Siti (Punya Kode)',
             'email' => 'siti@example.com',
             'password' => Hash::make('password123'),
-            'pairing_code' => 'SITI12',
             'pairing_code_expires_at' => Carbon::now()->addHours(24),
         ]);
 
@@ -65,8 +73,8 @@ class TestAccountSeeder extends Seeder
             [
                 ['Suami', 'Suami Test', 'suami@example.com', 'password123', 'Connected', '-'],
                 ['Istri', 'Istri Test', 'istri@example.com', 'password123', 'Connected', '-'],
-                ['Single 1', 'Budi', 'budi@example.com', 'password123', 'Not Connected', '-'],
-                ['Single 2', 'Siti', 'siti@example.com', 'password123', 'Not Connected', 'SITI12'],
+                ['Single 1', 'Budi', 'budi@example.com', 'password123', 'Not Connected', 'ABCD1234'],
+                ['Single 2', 'Siti', 'siti@example.com', 'password123', 'Not Connected', 'ABCD1234'],
             ]
         );
     }

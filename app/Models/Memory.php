@@ -15,10 +15,12 @@ class Memory extends Model
         'description',
         'image_path',
         'memory_date',
+        'tags',
     ];
 
     protected $casts = [
         'memory_date' => 'date',
+        'tags' => 'array',
     ];
 
     public function couple()

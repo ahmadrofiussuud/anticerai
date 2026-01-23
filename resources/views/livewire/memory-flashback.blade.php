@@ -4,22 +4,22 @@
 
     <div class="flex justify-between items-center mb-6 z-10">
         <div>
-            <h3 class="text-2xl font-display font-bold text-slate-800 tracking-tight mb-1">Flashback</h3>
-            <p class="text-slate-400 text-sm font-medium">Memory Lane</p>
+            <h3 class="text-2xl font-display font-bold text-slate-800 tracking-tight mb-1">Kilas Balik</h3>
+            <p class="text-slate-400 text-sm font-medium">Lorong Kenangan</p>
         </div>
         <button wire:click="toggleForm" class="bg-amber-100 text-amber-600 hover:bg-amber-200 px-4 py-2 rounded-xl text-xs font-bold transition-colors">
-            {{ $showForm ? 'Cancel' : '+ New' }}
+            {{ $showForm ? 'Batal' : '+ Baru' }}
         </button>
     </div>
 
     <div class="flex-grow relative z-10">
         @if($showForm)
             <div class="h-full flex flex-col animate-fade-in-up">
-                <input wire:model="title" type="text" placeholder="Title..." class="w-full bg-slate-50 border-0 border-b-2 border-slate-100 focus:border-amber-400 focus:ring-0 px-0 py-2 text-lg font-bold bg-transparent placeholder-slate-300 mb-4 transition-colors">
+                <input wire:model="title" type="text" placeholder="Judul..." class="w-full bg-slate-50 border-0 border-b-2 border-slate-100 focus:border-amber-400 focus:ring-0 px-0 py-2 text-lg font-bold bg-transparent placeholder-slate-300 mb-4 transition-colors">
                 
-                <textarea wire:model="description" placeholder="Write about this moment..." class="flex-grow w-full bg-slate-50 rounded-2xl border-0 p-4 text-sm resize-none focus:ring-2 focus:ring-amber-200 transition-shadow mb-4 placeholder-slate-400"></textarea>
+                <textarea wire:model="description" placeholder="Tulis tentang momen ini..." class="flex-grow w-full bg-slate-50 rounded-2xl border-0 p-4 text-sm resize-none focus:ring-2 focus:ring-amber-200 transition-shadow mb-4 placeholder-slate-400"></textarea>
                 
-                <button wire:click="save" class="w-full bg-amber-500 hover:bg-amber-600 text-white font-bold py-3 rounded-xl shadow-lg shadow-amber-200 transition-all transform active:scale-95">Save Memory</button>
+                <button wire:click="save" class="w-full bg-amber-500 hover:bg-amber-600 text-white font-bold py-3 rounded-xl shadow-lg shadow-amber-200 transition-all transform active:scale-95">Simpan Kenangan</button>
             </div>
         @else
             @if($randomMemory)
@@ -37,7 +37,7 @@
                                 <div class="w-full h-full flex items-center justify-center text-amber-200 text-4xl">🎞️</div>
                             @endif
                             <div class="absolute top-2 right-2 bg-black/50 backdrop-blur text-white text-[10px] font-bold px-2 py-1 rounded">
-                                {{ $randomMemory->memory_date->format('M d, Y') }}
+                                {{ $randomMemory->memory_date->format('d M Y') }}
                             </div>
                         </div>
                         <div class="flex-grow">
@@ -52,7 +52,7 @@
             @else
                 <div class="h-full flex flex-col items-center justify-center text-center opacity-50">
                     <div class="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mb-4 text-2xl">📸</div>
-                    <p class="font-bold text-slate-400">No memories yet</p>
+                    <p class="font-bold text-slate-400">Belum ada kenangan</p>
                 </div>
             @endif
         @endif

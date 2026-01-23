@@ -29,9 +29,9 @@
                 <div class="absolute -inset-4 border border-[#4A6741]/10 rounded-full animate-[spin_15s_linear_infinite_reverse]"></div>
             </div>
 
-            <h1 class="text-5xl lg:text-7xl font-serif font-bold text-[#2A3C2A] mb-4 relative z-20">Nostalgia Engine</h1>
+            <h1 class="text-5xl lg:text-7xl font-serif font-bold text-[#2A3C2A] mb-4 relative z-20">Mesin Nostalgia</h1>
             <p class="text-[#6B7C6B] text-xl max-w-lg mx-auto leading-relaxed relative z-20">
-                Your timeline of beautiful moments, curated automatically.
+                Linimasa momen indah Anda, dikurasi secara otomatis.
             </p>
         </div>
 
@@ -48,8 +48,8 @@
                      alt="Milestones">
                 <div class="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent"></div>
                 <div class="absolute inset-0 p-6 flex flex-col justify-center">
-                    <h3 class="font-serif font-bold text-white text-2xl leading-tight shadow-black/50 drop-shadow-md mb-1">Milestones</h3>
-                    <p class="text-xs font-bold text-[#F4A460] uppercase tracking-wider">{{ now()->year - 2016 }} Years Journey</p>
+                    <h3 class="font-serif font-bold text-white text-2xl leading-tight shadow-black/50 drop-shadow-md mb-1">Tonggak Sejarah</h3>
+                    <p class="text-xs font-bold text-[#F4A460] uppercase tracking-wider">{{ now()->year - 2016 }} Tahun Perjalanan</p>
                 </div>
             </div>
         </div>
@@ -67,8 +67,8 @@
                      alt="Adventures">
                 <div class="absolute inset-0 bg-gradient-to-l from-black/80 via-black/40 to-transparent"></div>
                 <div class="absolute inset-0 p-6 flex flex-col justify-center items-end text-right">
-                     <h3 class="font-serif font-bold text-white text-2xl leading-tight shadow-black/50 drop-shadow-md mb-1">Adventures</h3>
-                     <p class="text-xs font-bold text-[#90EE90] uppercase tracking-wider">{{ count($memories) }} Captured</p>
+                     <h3 class="font-serif font-bold text-white text-2xl leading-tight shadow-black/50 drop-shadow-md mb-1">Petualangan</h3>
+                     <p class="text-xs font-bold text-[#90EE90] uppercase tracking-wider">{{ count($memories) }} Terabadikan</p>
                 </div>
             </div>
         </div>
@@ -86,8 +86,8 @@
                      alt="Connection">
                 <div class="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent"></div>
                 <div class="absolute inset-0 p-6 flex flex-col justify-center">
-                    <h3 class="font-serif font-bold text-white text-2xl leading-tight shadow-black/50 drop-shadow-md mb-1">Connection</h3>
-                    <p class="text-xs font-bold text-[#FFB7B2] uppercase tracking-wider">Endless Growth</p>
+                    <h3 class="font-serif font-bold text-white text-2xl leading-tight shadow-black/50 drop-shadow-md mb-1">Koneksi</h3>
+                    <p class="text-xs font-bold text-[#FFB7B2] uppercase tracking-wider">Pertumbuhan Tanpa Batas</p>
                 </div>
             </div>
         </div>
@@ -105,8 +105,8 @@
                      alt="Categories">
                 <div class="absolute inset-0 bg-gradient-to-l from-black/80 via-black/40 to-transparent"></div>
                 <div class="absolute inset-0 p-6 flex flex-col justify-center items-end text-right">
-                    <h3 class="font-serif font-bold text-white text-2xl leading-tight shadow-black/50 drop-shadow-md mb-1">Themes</h3>
-                    <p class="text-xs font-bold text-[#A8D5BA] uppercase tracking-wider">{{ count($this->allTags) }} Collections</p>
+                    <h3 class="font-serif font-bold text-white text-2xl leading-tight shadow-black/50 drop-shadow-md mb-1">Tema</h3>
+                    <p class="text-xs font-bold text-[#A8D5BA] uppercase tracking-wider">{{ count($this->allTags) }} Koleksi</p>
                 </div>
             </div>
         </div>
@@ -114,128 +114,148 @@
     </div>
 
 
-        <!-- Toolbar -->
-        <div class="bg-white rounded-2xl shadow-lg border border-[#E5E0D0] p-4 mb-8">
-            <div class="flex flex-wrap items-center justify-between gap-4">
-                <!-- Left: Search & Filter -->
-                <div class="flex flex-wrap items-center gap-3 flex-1">
-                    <!-- Search -->
-                    <div class="relative flex-1 min-w-[200px] max-w-md">
-                        <input type="text" wire:model.live="searchQuery" 
-                               placeholder="Search memories..." 
-                               class="w-full pl-10 pr-4 py-2 rounded-xl border border-[#E5E0D0] focus:ring-2 focus:ring-[#C67C5C] focus:border-transparent">
-                        <svg class="w-5 h-5 text-[#6B7C6B] absolute left-3 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                        </svg>
-                    </div>
-
-                    <!-- Filter Toggle -->
-                    <button @click="showFilters = !showFilters" 
-                            class="px-4 py-2 rounded-xl border-2 border-[#E5E0D0] hover:border-[#C67C5C] transition-colors flex items-center gap-2">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path>
-                        </svg>
-                        <span class="font-bold text-sm">Filters</span>
-                    </button>
-                </div>
-
-                <!-- Right: View Mode & Add Button -->
-                <div class="flex items-center gap-3">
-                    <!-- View Mode Toggle -->
-                    <div class="bg-[#E5E0D0] rounded-xl p-1 flex gap-1">
-                        <button wire:click="$set('viewMode', 'grid')" 
-                                class="px-3 py-2 rounded-lg transition-colors {{ $viewMode === 'grid' ? 'bg-white shadow-sm' : 'hover:bg-white/50' }}">
-                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                <path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path>
+        <!-- Main Content Wrapper -->
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-24 relative z-20 pb-20">
+            
+            <!-- Toolbar -->
+            <div class="bg-white/80 backdrop-blur-xl rounded-2xl shadow-sm border border-white/50 p-6 mb-8 transform hover:scale-[1.005] transition-all duration-300">
+                <div class="flex flex-col md:flex-row gap-6 items-center justify-between">
+                    <!-- Left: Search & Filter -->
+                    <div class="flex items-center gap-3 flex-1 w-full">
+                        <!-- Search -->
+                        <div class="relative flex-1 max-w-xl">
+                            <input type="text" wire:model.live.debounce.300ms="searchQuery" 
+                                   placeholder="Cari kenangan..." 
+                                   class="w-full pl-10 pr-4 py-3 rounded-xl border border-[#E5E0D0] focus:ring-2 focus:ring-[#C67C5C] focus:border-transparent bg-white/50 focus:bg-white transition-all shadow-sm">
+                            <svg class="w-5 h-5 text-[#6B7C6B] absolute left-3 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                             </svg>
-                        </button>
-                        <button wire:click="$set('viewMode', 'timeline')" 
-                                class="px-3 py-2 rounded-lg transition-colors {{ $viewMode === 'timeline' ? 'bg-white shadow-sm' : 'hover:bg-white/50' }}">
-                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"></path>
+                        </div>
+
+                        <!-- Filter Toggle -->
+                        <button @click="showFilters = !showFilters" 
+                                class="px-5 py-3 rounded-xl border-2 border-[#E5E0D0] hover:border-[#C67C5C] hover:text-[#C67C5C] transition-all flex items-center gap-2 bg-white/50 font-bold text-[#6B7C6B] shadow-sm whitespace-nowrap">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path>
                             </svg>
+                            <span>Filter</span>
                         </button>
                     </div>
 
-                    <!-- Add Memory Button -->
-                    <button wire:click="toggleUploadForm" 
-                            class="bg-gradient-to-r from-[#C67C5C] to-[#D89A7A] text-white font-bold px-6 py-2 rounded-xl hover:opacity-90 transition-all shadow-lg hover:scale-105 flex items-center gap-2">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-                        </svg>
-                        <span>Add Memory</span>
-                    </button>
-                </div>
-            </div>
-
-            <!-- Filters Panel (Collapsible) -->
-            <div x-show="showFilters" x-collapse class="mt-4 pt-4 border-t border-[#E5E0D0]">
-                <div class="flex flex-wrap items-center gap-4">
-                    <!-- Tag Filter -->
-                    <div class="flex-1 min-w-[200px]">
-                        <label class="block text-xs font-bold text-[#2A3C2A] mb-2">Filter by Tag</label>
-                        <select wire:model.live="filterTag" class="w-full px-4 py-2 rounded-xl border border-[#E5E0D0] focus:ring-2 focus:ring-[#C67C5C]">
-                            <option value="">All Tags</option>
-                            @foreach($this->allTags as $tag)
-                                <option value="{{ $tag }}">{{ ucfirst($tag) }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-
-                    <!-- Sort By -->
-                    <div class="flex-1 min-w-[200px]">
-                        <label class="block text-xs font-bold text-[#2A3C2A] mb-2">Sort By</label>
-                        <select wire:model.live="sortBy" class="w-full px-4 py-2 rounded-xl border border-[#E5E0D0] focus:ring-2 focus:ring-[#C67C5C]">
-                            <option value="date_desc">Newest First</option>
-                            <option value="date_asc">Oldest First</option>
-                            <option value="title">Title (A-Z)</option>
-                        </select>
-                    </div>
-
-                    <!-- Clear Filters -->
-                    @if($searchQuery || $filterTag)
-                        <div class="flex items-end">
-                            <button wire:click="$set('searchQuery', ''); $set('filterTag', '')" 
-                                    class="px-4 py-2 text-sm font-bold text-[#C67C5C] hover:text-[#D89A7A] transition-colors">
-                                Clear Filters
+                    <!-- Right: View Mode & Add Button -->
+                    <div class="flex items-center gap-3 w-full md:w-auto justify-end">
+                        <!-- View Mode Toggle -->
+                        <div class="bg-[#F2EFE5] rounded-xl p-1 flex gap-1">
+                            <button wire:click="$set('viewMode', 'grid')" 
+                                    class="px-3 py-2 rounded-lg transition-all {{ $viewMode === 'grid' ? 'bg-white shadow text-[#C67C5C]' : 'text-[#6B7C6B] hover:bg-white/50' }}">
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path>
+                                </svg>
+                            </button>
+                            <button wire:click="$set('viewMode', 'timeline')" 
+                                    class="px-3 py-2 rounded-lg transition-all {{ $viewMode === 'timeline' ? 'bg-white shadow text-[#C67C5C]' : 'text-[#6B7C6B] hover:bg-white/50' }}">
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"></path>
+                                </svg>
                             </button>
                         </div>
-                    @endif
+
+                        <!-- Add Memory Button -->
+                        <button wire:click="toggleUploadForm" 
+                                class="bg-gradient-to-r from-[#C67C5C] to-[#D89A7A] text-white font-bold px-6 py-2.5 rounded-xl hover:shadow-lg hover:from-[#B56B4B] hover:to-[#C67C5C] transition-all transform hover:-translate-y-0.5 flex items-center gap-2">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                            </svg>
+                            <span class="hidden sm:inline">Tambah Memori</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Filters Panel (Collapsible) -->
+                <div x-show="showFilters" x-collapse class="mt-0">
+                    <div class="pt-6 mt-6 border-t border-[#E5E0D0] flex flex-wrap items-center gap-4">
+                        <!-- Tag Filter -->
+                        <div class="flex-1 min-w-[200px]">
+                            <label class="block text-xs font-bold text-[#6B7C6B] uppercase tracking-wider mb-2">Filter Tag</label>
+                            <select wire:model.live="filterTag" class="w-full px-4 py-2 rounded-xl border border-[#E5E0D0] focus:ring-2 focus:ring-[#C67C5C] focus:border-transparent bg-white">
+                                <option value="">Semua Tag</option>
+                                @foreach($this->allTags as $tag)
+                                    <option value="{{ $tag }}">{{ ucfirst($tag) }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <!-- Sort By -->
+                        <div class="flex-1 min-w-[200px]">
+                            <label class="block text-xs font-bold text-[#6B7C6B] uppercase tracking-wider mb-2">Urutkan</label>
+                            <select wire:model.live="sortBy" class="w-full px-4 py-2 rounded-xl border border-[#E5E0D0] focus:ring-2 focus:ring-[#C67C5C] focus:border-transparent bg-white">
+                                <option value="date_desc">Terbaru</option>
+                                <option value="date_asc">Terlama</option>
+                                <option value="title">Judul (A-Z)</option>
+                            </select>
+                        </div>
+
+                        <!-- Clear Filters -->
+                        @if($searchQuery || $filterTag)
+                            <div class="flex items-end pb-1">
+                                <button wire:click="$set('searchQuery', ''); $set('filterTag', '')" 
+                                        class="px-4 py-2 text-sm font-bold text-[#C67C5C] hover:text-[#B56B4B] hover:underline transition-colors">
+                                    Hapus Filter
+                                </button>
+                            </div>
+                        @endif
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <!-- Grid View -->
-        @if($viewMode === 'grid')
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Grid View -->
+            @if($viewMode === 'grid')
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 @foreach($this->filteredMemories as $memory)
-                    <div wire:click="selectMemory({{ $memory['id'] }})" 
-                         class="group bg-white rounded-3xl shadow-lg overflow-hidden border border-[#E5E0D0] hover:shadow-2xl transition-all hover:scale-105 cursor-pointer">
+                    <div wire:click="selectMemory({{ $memory->id }})" 
+                         class="group bg-white rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-[1.02] cursor-pointer border border-[#E5E0D0] flex flex-col h-full">
                         <!-- Memory Photo -->
-                        <div class="relative h-64 overflow-hidden">
-                            <img src="{{ $memory['photo'] }}" 
-                                 alt="{{ $memory['title'] }}" 
-                                 class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                        <div class="relative h-64 overflow-hidden bg-[#F2EFE5]">
+                            <!-- Main Image -->
+                            <img src="{{ $memory->image_path }}" 
+                                 alt="{{ $memory->title }}" 
+                                 class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 text-[0px]"
+                                 onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                             
+                            <!-- Fallback Container (Hidden by default, shown on error) -->
+                            <div class="absolute inset-0 hidden items-center justify-center bg-[#F7F5F0] -z-10 group-hover:scale-110 transition-transform duration-700">
+                                <svg class="w-16 h-16 text-[#D4CEBC]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                </svg>
+                            </div>
+
+                            <!-- Overlay Gradient -->
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-60"></div>
+
                             <!-- Date Badge -->
-                            <div class="absolute top-4 left-4 bg-white/95 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-bold text-[#2A3C2A] shadow-lg">
-                                {{ \Carbon\Carbon::parse($memory['date'])->format('M d, Y') }}
+                            <div class="absolute top-5 left-5 bg-white/95 backdrop-blur-md px-3 py-1.5 rounded-full text-xs font-bold text-[#2A3C2A] shadow-md z-10 transition-transform group-hover:-translate-y-1">
+                                {{ \Carbon\Carbon::parse($memory->memory_date)->format('d M Y') }}
                             </div>
 
                             <!-- Tags -->
-                            <div class="absolute bottom-4 left-4 flex gap-2">
-                                @foreach($memory['tags'] as $tag)
-                                    <span class="bg-[#4A6741]/80 backdrop-blur-sm text-white text-xs px-3 py-1 rounded-full">
-                                        {{ $tag }}
-                                    </span>
-                                @endforeach
+                            <div class="absolute bottom-5 left-5 right-5 flex flex-wrap gap-2 z-10">
+                                @if($memory->tags)
+                                    @foreach(array_slice($memory->tags, 0, 3) as $tag)
+                                        <span class="bg-[#4A6741]/90 backdrop-blur-md text-white text-[10px] px-3 py-1 rounded-full uppercase tracking-wider shadow-sm">
+                                            {{ $tag }}
+                                        </span>
+                                    @endforeach
+                                    @if(count($memory->tags) > 3)
+                                        <span class="bg-black/30 backdrop-blur-md text-white text-[10px] px-2 py-1 rounded-full shadow-sm">+{{ count($memory->tags) - 3 }}</span>
+                                    @endif
+                                @endif
                             </div>
                         </div>
 
                         <!-- Memory Info -->
-                        <div class="p-5">
-                            <h3 class="text-xl font-serif font-bold text-[#2A3C2A] mb-2">{{ $memory['title'] }}</h3>
-                            <p class="text-[#6B7C6B] text-sm leading-relaxed line-clamp-2">{{ $memory['description'] }}</p>
+                        <div class="p-6 flex-grow flex flex-col">
+                            <h3 class="text-xl font-serif font-bold text-[#2A3C2A] mb-3 leading-tight group-hover:text-[#C67C5C] transition-colors">{{ $memory->title }}</h3>
+                            <p class="text-[#6B7C6B] text-sm leading-relaxed line-clamp-3">{{ $memory->description }}</p>
                         </div>
                     </div>
                 @endforeach
@@ -258,31 +278,41 @@
                         </div>
 
                         <!-- Memory Card -->
-                        <div wire:click="selectMemory({{ $memory['id'] }})" 
+                        <div wire:click="selectMemory({{ $memory->id }})" 
                              class="bg-white rounded-2xl shadow-lg border border-[#E5E0D0] overflow-hidden hover:shadow-2xl transition-all cursor-pointer">
                             <div class="md:flex">
                                 <!-- Photo -->
-                                <div class="md:w-1/3 h-48 md:h-auto overflow-hidden">
-                                    <img src="{{ $memory['photo'] }}" 
-                                         alt="{{ $memory['title'] }}" 
-                                         class="w-full h-full object-cover hover:scale-110 transition-transform duration-500">
+                                <div class="md:w-1/3 h-48 md:h-auto overflow-hidden bg-[#F2EFE5] relative">
+                                    <img src="{{ $memory->image_path }}" 
+                                         alt="{{ $memory->title }}" 
+                                         class="w-full h-full object-cover hover:scale-110 transition-transform duration-500 text-[0px]"
+                                         onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                         
+                                    <!-- Fallback Icon if Image Fails -->
+                                    <div class="absolute inset-0 hidden items-center justify-center bg-[#F7F5F0]">
+                                        <svg class="w-12 h-12 text-[#D4CEBC]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                        </svg>
+                                    </div>
                                 </div>
 
                                 <!-- Content -->
                                 <div class="md:w-2/3 p-6">
                                     <div class="flex items-start justify-between mb-3">
                                         <div>
-                                            <h3 class="text-2xl font-serif font-bold text-[#2A3C2A] mb-1">{{ $memory['title'] }}</h3>
-                                            <p class="text-sm text-[#6B7C6B]">{{ \Carbon\Carbon::parse($memory['date'])->format('F d, Y') }}</p>
+                                            <h3 class="text-2xl font-serif font-bold text-[#2A3C2A] mb-1">{{ $memory->title }}</h3>
+                                            <p class="text-sm text-[#6B7C6B]">{{ \Carbon\Carbon::parse($memory->memory_date)->format('F d, Y') }}</p>
                                         </div>
                                     </div>
-                                    <p class="text-[#6B7C6B] leading-relaxed mb-4">{{ $memory['description'] }}</p>
+                                    <p class="text-[#6B7C6B] leading-relaxed mb-4">{{ $memory->description }}</p>
                                     <div class="flex gap-2">
-                                        @foreach($memory['tags'] as $tag)
-                                            <span class="bg-[#E5E0D0] text-[#2A3C2A] text-xs px-3 py-1 rounded-full font-bold">
-                                                {{ $tag }}
-                                            </span>
-                                        @endforeach
+                                        @if($memory->tags)
+                                            @foreach($memory->tags as $tag)
+                                                <span class="bg-[#E5E0D0] text-[#2A3C2A] text-xs px-3 py-1 rounded-full font-bold">
+                                                    {{ $tag }}
+                                                </span>
+                                            @endforeach
+                                        @endif
                                     </div>
                                 </div>
                             </div>
@@ -298,11 +328,11 @@
                 <svg class="w-24 h-24 mx-auto text-[#D4CEBC] mb-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
                 </svg>
-                <h3 class="text-2xl font-serif font-bold text-[#2A3C2A] mb-3">No Memories Found</h3>
-                <p class="text-[#6B7C6B] mb-6">Try adjusting your filters or add a new memory</p>
+                <h3 class="text-2xl font-serif font-bold text-[#2A3C2A] mb-3">Tidak Ada Kenangan Ditemukan</h3>
+                <p class="text-[#6B7C6B] mb-6">Coba sesuaikan filter Anda atau tambahkan kenangan baru</p>
                 <button wire:click="$set('searchQuery', ''); $set('filterTag', '')" 
                         class="text-[#C67C5C] font-bold hover:text-[#D89A7A] transition-colors">
-                    Clear Filters
+                    Hapus Filter
                 </button>
             </div>
         @endif
@@ -319,47 +349,65 @@
                     </svg>
                 </button>
 
-                <h2 class="text-3xl font-serif font-bold text-[#2A3C2A] mb-6">Add New Memory</h2>
+                <h2 class="text-3xl font-serif font-bold text-[#2A3C2A] mb-6">Tambah Kenangan Baru</h2>
                 
                 <form wire:submit.prevent="saveMemory" class="space-y-4">
                     <div>
-                        <label class="block text-sm font-bold text-[#2A3C2A] mb-2">Memory Title</label>
+                        <label class="block text-sm font-bold text-[#2A3C2A] mb-2">Judul Kenangan</label>
                         <input type="text" wire:model="newMemory.title" 
                                class="w-full px-4 py-3 rounded-xl border border-[#E5E0D0] focus:ring-2 focus:ring-[#4A6741] focus:border-transparent"
-                               placeholder="e.g., First Date at Cafe">
+                               placeholder="Contoh: Kencan Pertama di Kafe">
+                         @error('newMemory.title') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                     </div>
 
                     <div>
-                        <label class="block text-sm font-bold text-[#2A3C2A] mb-2">Date</label>
+                        <label class="block text-sm font-bold text-[#2A3C2A] mb-2">Tanggal</label>
                         <input type="date" wire:model="newMemory.date" 
                                class="w-full px-4 py-3 rounded-xl border border-[#E5E0D0] focus:ring-2 focus:ring-[#4A6741] focus:border-transparent">
+                        @error('newMemory.date') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                     </div>
 
                     <div>
-                        <label class="block text-sm font-bold text-[#2A3C2A] mb-2">Description</label>
+                        <label class="block text-sm font-bold text-[#2A3C2A] mb-2">Deskripsi</label>
                         <textarea wire:model="newMemory.description" rows="3"
                                   class="w-full px-4 py-3 rounded-xl border border-[#E5E0D0] focus:ring-2 focus:ring-[#4A6741] focus:border-transparent"
-                                  placeholder="Tell the story..."></textarea>
+                                  placeholder="Ceritakan kisahnya..."></textarea>
+                         @error('newMemory.description') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                    </div>
+
+                     <div>
+                        <label class="block text-sm font-bold text-[#2A3C2A] mb-2">Tag</label>
+                        <input type="text" wire:model="newMemory.tags" 
+                               class="w-full px-4 py-3 rounded-xl border border-[#E5E0D0] focus:ring-2 focus:ring-[#4A6741] focus:border-transparent"
+                               placeholder="Contoh: kencan, jalan-jalan, anniversary (pisahkan dengan koma)">
                     </div>
 
                     <div>
-                        <label class="block text-sm font-bold text-[#2A3C2A] mb-2">Upload Photo</label>
-                        <div class="border-2 border-dashed border-[#E5E0D0] rounded-xl p-8 text-center hover:border-[#4A6741] transition-colors cursor-pointer">
+                        <label class="block text-sm font-bold text-[#2A3C2A] mb-2">Unggah Foto</label>
+                        <div class="border-2 border-dashed border-[#E5E0D0] rounded-xl p-8 text-center hover:border-[#4A6741] transition-colors cursor-pointer relative">
+                             <input type="file" wire:model="photo" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
                             <svg class="w-12 h-12 mx-auto text-[#6B7C6B] mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
                             </svg>
-                            <p class="text-[#6B7C6B] text-sm">Click to upload or drag and drop</p>
+                            <p class="text-[#6B7C6B] text-sm">
+                                @if($photo) 
+                                    {{ $photo->getClientOriginalName() }} 
+                                @else 
+                                    Klik untuk unggah atau seret dan lepas 
+                                @endif
+                            </p>
                         </div>
+                        @error('photo') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                     </div>
 
                     <div class="flex gap-3 pt-4">
                         <button type="submit" 
                                 class="flex-1 bg-gradient-to-r from-[#4A6741] to-[#5C7C53] text-white font-bold py-3 rounded-xl hover:opacity-90 transition-opacity">
-                            Save Memory
+                            Simpan Kenangan
                         </button>
                         <button type="button" wire:click="toggleUploadForm"
                                 class="px-6 bg-[#E5E0D0] text-[#2A3C2A] font-bold py-3 rounded-xl hover:bg-[#D4CEBC] transition-colors">
-                            Cancel
+                            Batal
                         </button>
                     </div>
                 </form>
@@ -399,29 +447,31 @@
                 <div class="grid md:grid-cols-2 gap-8 items-center">
                     <!-- Photo -->
                     <div class="rounded-2xl overflow-hidden shadow-2xl">
-                        <img src="{{ $selectedMemory['photo'] }}" 
-                             alt="{{ $selectedMemory['title'] }}" 
+                        <img src="{{ $selectedMemory->image_path }}" 
+                             alt="{{ $selectedMemory->title }}" 
                              class="w-full h-auto">
                     </div>
 
                     <!-- Details -->
                     <div class="text-white">
                         <div class="mb-4">
-                            <p class="text-sm text-white/60 mb-2">{{ \Carbon\Carbon::parse($selectedMemory['date'])->format('F d, Y') }}</p>
-                            <h2 class="text-4xl font-serif font-bold mb-4">{{ $selectedMemory['title'] }}</h2>
-                            <p class="text-lg text-white/90 leading-relaxed mb-6">{{ $selectedMemory['description'] }}</p>
+                            <p class="text-sm text-white/60 mb-2">{{ \Carbon\Carbon::parse($selectedMemory->memory_date)->format('F d, Y') }}</p>
+                            <h2 class="text-4xl font-serif font-bold mb-4">{{ $selectedMemory->title }}</h2>
+                            <p class="text-lg text-white/90 leading-relaxed mb-6">{{ $selectedMemory->description }}</p>
                         </div>
 
                         <div class="flex gap-2 mb-6">
-                            @foreach($selectedMemory['tags'] as $tag)
-                                <span class="bg-white/20 backdrop-blur-sm text-white text-sm px-4 py-2 rounded-full font-bold">
-                                    {{ $tag }}
-                                </span>
-                            @endforeach
+                            @if($selectedMemory->tags)
+                                @foreach($selectedMemory->tags as $tag)
+                                    <span class="bg-white/20 backdrop-blur-sm text-white text-sm px-4 py-2 rounded-full font-bold">
+                                        {{ $tag }}
+                                    </span>
+                                @endforeach
+                            @endif
                         </div>
 
                         <div class="text-sm text-white/60">
-                            Memory {{ collect($this->filteredMemories)->search(fn($m) => $m['id'] === $selectedMemory['id']) + 1 }} of {{ count($this->filteredMemories) }}
+                            Kenangan {{ $this->filteredMemories->search(fn($m) => $m->id === $selectedMemory->id) + 1 }} dari {{ $this->filteredMemories->count() }}
                         </div>
                     </div>
                 </div>

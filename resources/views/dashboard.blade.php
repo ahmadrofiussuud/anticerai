@@ -2,7 +2,7 @@
     <div class="min-h-screen bg-[#FDFBF7]">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
             @if(!auth()->user()->couple_id)
-                <livewire:pairing-manager />
+                <livewire:partner-coupling />
             @else
                 <!-- Hero Section - "Your Memories" -->
                 <div class="text-center mb-12 animate-fade-in-up">

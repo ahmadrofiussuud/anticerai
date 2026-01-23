@@ -58,6 +58,23 @@
                     <p class="text-sm text-[#6B7C6B] mb-6">Have a code from your partner? Enter it here to connect.</p>
 
                     <div class="space-y-4">
+                        <div class="flex gap-4 p-2 bg-[#FDFBF7] rounded-xl border border-[#D4CEBC] mb-4">
+                            <label class="flex-1 cursor-pointer">
+                                <input type="radio" wire:model="myRole" value="husband" class="sr-only peer">
+                                <div class="text-center py-2 rounded-lg border-2 border-transparent peer-checked:border-[#4A6741] peer-checked:bg-[#4A6741]/10 transition-all">
+                                    <span class="block text-2xl">👨</span>
+                                    <span class="text-xs font-bold text-[#2A3C2A]">Suami</span>
+                                </div>
+                            </label>
+                            <label class="flex-1 cursor-pointer">
+                                <input type="radio" wire:model="myRole" value="wife" class="sr-only peer">
+                                <div class="text-center py-2 rounded-lg border-2 border-transparent peer-checked:border-[#4A6741] peer-checked:bg-[#4A6741]/10 transition-all">
+                                    <span class="block text-2xl">👩</span>
+                                    <span class="text-xs font-bold text-[#2A3C2A]">Istri</span>
+                                </div>
+                            </label>
+                        </div>
+
                         <div>
                             <label for="code" class="sr-only">Pairing Code</label>
                             <input wire:model="partnerCode" type="text" id="code" placeholder="ABCD12" 

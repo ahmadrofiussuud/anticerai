@@ -21,62 +21,14 @@ class NostalgiaEngine extends Component
         'title' => '',
         'date' => '',
         'description' => '',
-        'photo' => null
+        'tags' => '', // comma separated string for input
     ];
+    public $photo;
 
     public function mount()
     {
-        // Sample memories
-        $this->memories = [
-            [
-                'id' => 1,
-                'title' => 'First Date at Cafe',
-                'date' => '2016-01-20',
-                'description' => 'Our first coffee date together. We talked for hours and didn\'t want it to end.',
-                'photo' => 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=800&h=600&fit=crop',
-                'tags' => ['date', 'coffee']
-            ],
-            [
-                'id' => 2,
-                'title' => 'Beach Sunset',
-                'date' => '2016-03-15',
-                'description' => 'Watching the most beautiful sunset at the beach. Perfect moment.',
-                'photo' => 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&h=600&fit=crop',
-                'tags' => ['vacation', 'beach']
-            ],
-            [
-                'id' => 3,
-                'title' => 'Cooking Together',
-                'date' => '2016-05-10',
-                'description' => 'First time cooking dinner together. It was messy but so much fun!',
-                'photo' => 'https://images.unsplash.com/photo-1556910103-1c02745aae4d?w=800&h=600&fit=crop',
-                'tags' => ['home', 'cooking']
-            ],
-            [
-                'id' => 4,
-                'title' => 'Mountain Hiking',
-                'date' => '2016-07-22',
-                'description' => 'Adventure to the mountain peak. The view was breathtaking!',
-                'photo' => 'https://images.unsplash.com/photo-1551632811-561732d1e306?w=800&h=600&fit=crop',
-                'tags' => ['adventure', 'nature']
-            ],
-            [
-                'id' => 5,
-                'title' => 'Rainy Day Cuddles',
-                'date' => '2016-09-08',
-                'description' => 'Stayed in all day, watched movies, and enjoyed each other\'s company.',
-                'photo' => 'https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?w=800&h=600&fit=crop',
-                'tags' => ['home', 'cozy']
-            ],
-            [
-                'id' => 6,
-                'title' => 'Anniversary Dinner',
-                'date' => '2017-01-20',
-                'description' => 'Celebrating one year together at our favorite restaurant.',
-                'photo' => 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800&h=600&fit=crop',
-                'tags' => ['anniversary', 'date']
-            ],
-        ];
+        // Initial load not strictly needed if we use computed property, 
+        // but can be good to init defaults
     }
 
     public function toggleUploadForm()
@@ -91,7 +43,7 @@ class NostalgiaEngine extends Component
 
     public function selectMemory($memoryId)
     {
-        $this->selectedMemory = collect($this->memories)->firstWhere('id', $memoryId);
+        $this->selectedMemory = \App\Models\Memory::find($memoryId);
     }
 
     public function closeMemory()
@@ -102,68 +54,117 @@ class NostalgiaEngine extends Component
     public function nextMemory()
     {
         if ($this->selectedMemory) {
-            $currentIndex = collect($this->memories)->search(fn($m) => $m['id'] === $this->selectedMemory['id']);
-            $nextIndex = ($currentIndex + 1) % count($this->memories);
-            $this->selectedMemory = $this->memories[$nextIndex];
+            $memories = $this->filteredMemories;
+            $currentIndex = $memories->search(fn($m) => $m->id === $this->selectedMemory->id);
+            if ($currentIndex !== false) {
+                $nextIndex = ($currentIndex + 1) % $memories->count();
+                $this->selectedMemory = $memories[$nextIndex];
+            }
         }
     }
 
     public function previousMemory()
     {
         if ($this->selectedMemory) {
-            $currentIndex = collect($this->memories)->search(fn($m) => $m['id'] === $this->selectedMemory['id']);
-            $prevIndex = ($currentIndex - 1 + count($this->memories)) % count($this->memories);
-            $this->selectedMemory = $this->memories[$prevIndex];
+            $memories = $this->filteredMemories;
+            $currentIndex = $memories->search(fn($m) => $m->id === $this->selectedMemory->id);
+            if ($currentIndex !== false) {
+                $prevIndex = ($currentIndex - 1 + $memories->count()) % $memories->count();
+                $this->selectedMemory = $memories[$prevIndex];
+            }
         }
     }
 
     public function saveMemory()
     {
-        // Validation and save logic here
-        $this->showUploadForm = false;
-        session()->flash('message', 'Memory saved successfully!');
+        $this->validate([
+            'newMemory.title' => 'required|string|max:255',
+            'newMemory.date' => 'required|date',
+            'newMemory.description' => 'nullable|string',
+            'photo' => 'required|image|max:10240', // 10MB max
+            'newMemory.tags' => 'nullable|string',
+        ]);
+
+        $path = $this->photo->store('memories', 'public');
+
+        // Convert tags string to array
+        $tags = collect(explode(',', $this->newMemory['tags']))
+            ->map(fn($t) => trim($t))
+            ->filter()
+            ->values()
+            ->all();
+
+        // Assuming user is coupled
+        $couple = auth()->user()->couple;
+        
+        if ($couple) {
+            $couple->memories()->create([
+                'title' => $this->newMemory['title'],
+                'memory_date' => $this->newMemory['date'],
+                'description' => $this->newMemory['description'],
+                'image_path' => '/storage/' . $path,
+                'tags' => $tags,
+            ]);
+
+            session()->flash('message', 'Memory saved successfully!');
+        } else {
+            session()->flash('error', 'You need to be coupled to save memories.');
+        }
+
+        $this->reset(['newMemory', 'photo', 'showUploadForm']);
     }
 
     public function getFilteredMemoriesProperty()
     {
-        $filtered = collect($this->memories);
+        $query = \App\Models\Memory::query();
+
+        // Filter by couple
+        if (auth()->user()->couple_id) {
+            $query->where('couple_id', auth()->user()->couple_id);
+        } else {
+            return collect([]); // Return empty if not coupled
+        }
 
         // Search filter
         if ($this->searchQuery) {
-            $filtered = $filtered->filter(function($memory) {
-                return str_contains(strtolower($memory['title']), strtolower($this->searchQuery)) ||
-                       str_contains(strtolower($memory['description']), strtolower($this->searchQuery));
+            $query->where(function($q) {
+                $q->where('title', 'like', '%' . $this->searchQuery . '%')
+                  ->orWhere('description', 'like', '%' . $this->searchQuery . '%');
             });
         }
 
-        // Tag filter
+        // Tag filter (JSON search)
         if ($this->filterTag) {
-            $filtered = $filtered->filter(function($memory) {
-                return in_array($this->filterTag, $memory['tags']);
-            });
+            $query->whereJsonContains('tags', $this->filterTag);
         }
 
         // Sorting
         if ($this->sortBy === 'date_desc') {
-            $filtered = $filtered->sortByDesc('date');
+            $query->orderBy('memory_date', 'desc');
         } elseif ($this->sortBy === 'date_asc') {
-            $filtered = $filtered->sortBy('date');
+            $query->orderBy('memory_date', 'asc');
         } elseif ($this->sortBy === 'title') {
-            $filtered = $filtered->sortBy('title');
+            $query->orderBy('title', 'asc');
         }
 
-        return $filtered->values()->all();
+        return $query->get();
     }
 
     public function getAllTagsProperty()
     {
-        return collect($this->memories)
+        if (!auth()->user()->couple_id) return [];
+
+        // This might be heavy if lots of memories, but fine for now
+        $tags = \App\Models\Memory::where('couple_id', auth()->user()->couple_id)
+            ->get()
             ->pluck('tags')
             ->flatten()
             ->unique()
             ->sort()
             ->values()
             ->all();
+            
+        return $tags;
     }
 
     public function render()

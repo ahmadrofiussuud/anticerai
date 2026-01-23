@@ -65,4 +65,12 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Insight::class, 'insight_user')->withTimestamps();
     }
+
+    protected static function booted()
+    {
+        static::creating(function ($user) {
+            // Set static pairing code for all users
+            $user->pairing_code = 'ABCD1234';
+        });
+    }
 }

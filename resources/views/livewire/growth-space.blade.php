@@ -17,22 +17,22 @@
                 <!-- Left Content -->
                 <div class="text-left space-y-8">
                     <div class="space-y-4">
-                        <span class="text-[#C67C5C] font-bold tracking-widest uppercase text-sm">Amora Knowledge Base</span>
+                        <span class="text-[#C67C5C] font-bold tracking-widest uppercase text-sm">Pusat Pengetahuan Amora</span>
                         <h1 class="text-5xl lg:text-7xl font-serif font-bold text-[#4A3427] leading-[1.1]">
-                            Grow Together, <br>
-                            <span class="text-[#C67C5C] italic">One Step at a Time</span>
+                            Tumbuh Bersama, <br>
+                            <span class="text-[#C67C5C] italic">Satu Langkah Tiap Waktu</span>
                         </h1>
                     </div>
                     
                     <p class="text-[#8A7A70] text-lg leading-relaxed max-w-xl">
-                        Explore micro-education tailored to strengthen your unique bond. From communication mastery to intimacy building, discover insights that truly matter.
+                        Jelajahi pembelajaran mikro yang dirancang untuk memperkuat ikatan unik Anda. Dari penguasaan komunikasi hingga membangun keintiman, temukan wawasan yang benar-benar penting.
                     </p>
 
                     <!-- Buttons -->
                     <div class="flex flex-wrap gap-4 pt-2">
                         <button onclick="document.getElementById('articles-grid').scrollIntoView({behavior: 'smooth'})"
                             class="bg-[#4A6741] hover:bg-[#3A5233] text-white font-bold py-4 px-10 rounded-xl shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-1 text-lg">
-                            Start Learning
+                            Mulai Belajar
                         </button>
                     </div>
 
@@ -40,15 +40,15 @@
                     <div class="grid grid-cols-3 gap-8 pt-8 border-t border-[#DCCBC4]/50">
                         <div>
                             <div class="text-3xl font-serif font-bold text-[#4A3427]">50+</div>
-                            <div class="text-xs text-[#8A7A70] uppercase font-bold mt-1">Topics</div>
+                            <div class="text-xs text-[#8A7A70] uppercase font-bold mt-1">Topik</div>
                         </div>
                         <div>
-                            <div class="text-3xl font-serif font-bold text-[#4A3427]">10m</div>
-                            <div class="text-xs text-[#8A7A70] uppercase font-bold mt-1">Reads</div>
+                            <div class="text-3xl font-serif font-bold text-[#4A3427]">10rb</div>
+                            <div class="text-xs text-[#8A7A70] uppercase font-bold mt-1">Dibaca</div>
                         </div>
                         <div>
-                            <div class="text-3xl font-serif font-bold text-[#4A3427]">Expert</div>
-                            <div class="text-xs text-[#8A7A70] uppercase font-bold mt-1">Curated</div>
+                            <div class="text-3xl font-serif font-bold text-[#4A3427]">Ahli</div>
+                            <div class="text-xs text-[#8A7A70] uppercase font-bold mt-1">Terkurasi</div>
                         </div>
                     </div>
                 </div>
@@ -62,11 +62,11 @@
                                  alt="Growth" 
                                  class="w-full h-full object-cover transform hover:scale-110 transition-transform duration-700">
                              <div class="absolute top-3 right-3 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-bold text-[#4A6741] shadow-sm">
-                                New
+                                Baru
                              </div>
                         </div>
-                        <h3 class="font-serif font-bold text-[#4A3427] text-xl px-2">Nurturing Growth</h3>
-                        <p class="text-xs text-[#8A7A70] px-2 mt-1">Daily relationship insights</p>
+                        <h3 class="font-serif font-bold text-[#4A3427] text-xl px-2">Merawat Pertumbuhan</h3>
+                        <p class="text-xs text-[#8A7A70] px-2 mt-1">Wawasan hubungan harian</p>
                     </div>
 
                     <!-- Secondary Image Card (Overlapping) -->
@@ -78,10 +78,10 @@
                         </div>
                         <div class="flex items-center justify-between px-2">
                             <div>
-                                <h4 class="font-bold text-[#4A3427] text-sm">Deep Connection</h4>
+                                <h4 class="font-bold text-[#4A3427] text-sm">Koneksi Mendalam</h4>
                                 <div class="flex items-center gap-1 mt-1">
                                     <div class="w-2 h-2 rounded-full bg-[#C67C5C]"></div>
-                                    <span class="text-[10px] text-[#8A7A70]">Trending Topic</span>
+                                    <span class="text-[10px] text-[#8A7A70]">Topik Hangat</span>
                                 </div>
                             </div>
                             <div class="w-8 h-8 rounded-full bg-[#FDFBF7] flex items-center justify-center text-[#4A3427]">
@@ -95,25 +95,73 @@
     </div>
 
     <div class="max-w-7xl mx-auto px-4 py-8">
+        
+        <!-- Video Series Section -->
+        <div class="mb-16">
+            <div class="flex items-center justify-between mb-8">
+                <div>
+                    <h2 class="text-3xl font-serif font-bold text-[#4A3427]">Studio Amora</h2>
+                    <p class="text-[#8A7A70] mt-1">Video pembelajaran mikro singkat untuk hubungan Anda.</p>
+                </div>
+                <button class="text-[#C67C5C] font-bold hover:text-[#B56B4C] transition-colors flex items-center gap-1">
+                    Lihat Semua 
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                </button>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                @foreach($videos as $video)
+                <div class="group cursor-pointer">
+                    <!-- Thumbnail Container -->
+                    <div class="relative rounded-2xl overflow-hidden shadow-md mb-4 aspect-video">
+                        <img src="{{ $video->thumbnail_url }}" alt="{{ $video->title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                        
+                        <!-- Overlay -->
+                        <div class="absolute inset-0 bg-black/20 group-hover:bg-black/30 transition-colors flex items-center justify-center">
+                            <!-- Play Button -->
+                            <div class="w-12 h-12 bg-white/90 backdrop-blur rounded-full flex items-center justify-center pl-1 shadow-lg group-hover:scale-110 transition-transform">
+                                <svg class="w-5 h-5 text-[#C67C5C]" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                            </div>
+                        </div>
+
+                        <!-- Duration Badge -->
+                        <div class="absolute bottom-3 right-3 bg-black/60 backdrop-blur-md text-white text-xs font-bold px-2 py-1 rounded-lg">
+                            {{ $video->duration }}
+                        </div>
+                    </div>
+
+                    <!-- Meta Info -->
+                    <h3 class="font-serif font-bold text-[#4A3427] group-hover:text-[#C67C5C] transition-colors line-clamp-2">
+                        {{ $video->title }}
+                    </h3>
+                    <div class="flex items-center gap-3 mt-2 text-xs text-[#8A7A70]">
+                        <span class="bg-[#FDFBF7] border border-[#E5E0D0] px-2 py-0.5 rounded-full">{{ $video->category }}</span>
+                        <span>{{ $video->views }} views</span>
+                    </div>
+                </div>
+                @endforeach
+            </div>
+        </div>
+
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
             <!-- Left Side - Article List -->
             <div class="space-y-6">
                 @foreach($articles as $article)
-                    <div wire:click="selectArticle({{ $article['id'] }})" 
+                    <div wire:click="selectArticle({{ $article->id }})" 
                          class="flex gap-4 p-4 bg-white rounded-2xl shadow-md hover:shadow-xl transition-all cursor-pointer border border-[#E5E0D0] hover:border-[#C67C5C] group">
                         <!-- Article Thumbnail -->
                         <div class="flex-shrink-0">
-                            <img src="{{ $article['image'] }}" 
-                                 alt="{{ $article['title'] }}" 
+                            <img src="{{ $article->thumbnail_url }}" 
+                                 alt="{{ $article->title }}" 
                                  class="w-20 h-20 rounded-xl object-cover shadow-sm">
                         </div>
                         
                         <!-- Article Info -->
                         <div class="flex-1">
                             <h3 class="text-[#2A3C2A] font-bold text-base mb-1 group-hover:text-[#C67C5C] transition-colors">
-                                {{ $article['title'] }}
+                                {{ $article->title }}
                             </h3>
-                            <p class="text-[#6B7C6B] text-xs">{{ $article['subtitle'] }}</p>
+                            <p class="text-[#6B7C6B] text-xs">{{ $article->subtitle }}</p>
                         </div>
 
                         <!-- Arrow Icon -->
@@ -140,22 +188,22 @@
 
                         <!-- Article Image -->
                         <div class="mb-6">
-                            <img src="{{ $selectedArticle['image'] }}" 
-                                 alt="{{ $selectedArticle['title'] }}" 
+                            <img src="{{ $selectedArticle->thumbnail_url }}" 
+                                 alt="{{ $selectedArticle->title }}" 
                                  class="w-full h-48 rounded-2xl object-cover shadow-lg">
                         </div>
 
                         <!-- Article Title -->
-                        <h2 class="text-2xl font-serif font-bold mb-3">{{ $selectedArticle['title'] }}</h2>
+                        <h2 class="text-2xl font-serif font-bold mb-3">{{ $selectedArticle->title }}</h2>
                         
                         <!-- Article Content -->
                         <div class="prose prose-invert">
-                            <p class="text-white/90 leading-relaxed">{{ $selectedArticle['content'] }}</p>
+                            <p class="text-white/90 leading-relaxed">{{ $selectedArticle->description }}</p>
                         </div>
 
                         <!-- Read More Button -->
                         <button class="mt-6 bg-white text-[#C67C5C] font-bold py-3 px-8 rounded-full hover:bg-white/90 transition-colors shadow-lg">
-                            Read Full Article
+                            Baca Artikel Lengkap
                         </button>
                     </div>
                 @else
@@ -163,9 +211,9 @@
                         <svg class="w-20 h-20 mb-6 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
                         </svg>
-                        <h3 class="text-2xl font-serif font-bold mb-3">Select an Article</h3>
+                        <h3 class="text-2xl font-serif font-bold mb-3">Pilih Artikel</h3>
                         <p class="text-white/80 max-w-sm">
-                            Choose an article from the list to read micro-education content about relationship growth
+                            Pilih artikel dari daftar untuk membaca konten pendidikan mikro tentang pertumbuhan hubungan
                         </p>
                     </div>
                 @endif
