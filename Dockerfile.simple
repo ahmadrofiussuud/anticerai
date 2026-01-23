@@ -1,0 +1,93 @@
+FROM php:8.3-fpm
+
+LABEL maintainer="Laravel Developer"
+
+ARG WWWGROUP=1000
+ARG NODE_VERSION=20
+
+WORKDIR /var/www/html
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    git \
+    curl \
+    libpng-dev \
+    libonig-dev \
+    libxml2-dev \
+    libzip-dev \
+    zip \
+    unzip \
+    nginx \
+    supervisor \
+    default-mysql-client \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install PHP extensions
+RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd zip
+
+# Install Composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
+# Install Node.js
+RUN curl -fsSL https://deb.nodesource.com/setup_${NODE_VERSION}.x | bash - \
+    && apt-get install -y nodejs
+
+# Create user
+RUN groupadd --force -g $WWWGROUP laravel
+RUN useradd -ms /bin/bash --no-user-group -g $WWWGROUP -u 1337 laravel
+
+# Copy nginx config
+COPY nginx.conf /etc/nginx/sites-available/default
+
+# Copy supervisor config
+COPY supervisord-simple.conf /etc/supervisor/conf.d/supervisord.conf
+
+# Copy application files (excluding vendor and node_modules)
+COPY --chown=laravel:laravel composer.json composer.lock /var/www/html/
+COPY --chown=laravel:laravel package.json package-lock.json* /var/www/html/
+COPY --chown=laravel:laravel artisan /var/www/html/
+
+# Switch to laravel user for dependency installation
+USER laravel
+
+# Install PHP dependencies first
+RUN composer install --no-dev --optimize-autoloader --no-interaction --no-scripts
+
+# Copy the rest of the application
+USER root
+COPY --chown=laravel:laravel . /var/www/html
+
+# Switch back to laravel user
+USER laravel
+
+# Run post-install scripts and install Node dependencies
+RUN composer dump-autoload --optimize
+RUN npm ci --verbose
+
+# Build assets
+RUN npm run build
+
+# Switch back to root for final setup
+USER root
+
+# Set up Laravel environment
+RUN cp /var/www/html/.env.example /var/www/html/.env && \
+    php /var/www/html/artisan key:generate && \
+    sed -i 's/DB_CONNECTION=sqlite/DB_CONNECTION=mysql/' /var/www/html/.env && \
+    echo 'DB_HOST=mysql' >> /var/www/html/.env && \
+    echo 'DB_PORT=3306' >> /var/www/html/.env && \
+    echo 'DB_DATABASE=anticerai' >> /var/www/html/.env && \
+    echo 'DB_USERNAME=sail' >> /var/www/html/.env && \
+    echo 'DB_PASSWORD=password' >> /var/www/html/.env
+
+# Switch back to root
+USER root
+
+# Set permissions
+RUN chown -R laravel:laravel /var/www/html \
+    && chmod -R 755 /var/www/html/storage \
+    && chmod -R 755 /var/www/html/bootstrap/cache
+
+EXPOSE 80
+
+CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
