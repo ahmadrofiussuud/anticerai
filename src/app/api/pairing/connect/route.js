@@ -1,6 +1,6 @@
 import { auth } from "@/auth";
-import { PairingService } from "@/lib/services/pairingService";
 import { NextResponse } from "next/server";
+import { db, MOCK_USERS } from "@/lib/mock-data";
 import { z } from "zod";
 
 const schema = z.object({
@@ -21,8 +21,15 @@ export async function POST(req) {
             return NextResponse.json({ error: validated.error.errors[0].message }, { status: 422 });
         }
 
-        const couple = await PairingService.connectUser(session.user.id, validated.data.code);
-        return NextResponse.json({ success: true, couple });
+        // Mock logic: Find user with this code
+        const partner = MOCK_USERS.find(u => u.pairing_code === validated.data.code && u.email !== session.user.email);
+
+        if (!partner) {
+            throw new Error("INVALID_CODE");
+        }
+
+        // Return mock success
+        return NextResponse.json({ success: true, message: "Paired successfully (Mock)" });
 
     } catch (error) {
         const status = error.message === "INVALID_CODE" || error.message === "ALREADY_PAIRED" ? 400 : 500;

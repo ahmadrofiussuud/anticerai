@@ -1,12 +1,6 @@
 import { auth } from "@/auth";
 import { DashboardService } from "@/lib/services/dashboardService";
 import { NextResponse } from "next/server";
-import { z } from "zod";
-
-const postSchema = z.object({
-    energy_level: z.number().min(1).max(100),
-    note: z.string().optional(),
-});
 
 export async function GET(req) {
     const session = await auth();

@@ -1,90 +1,67 @@
-import { PrismaClient } from "@prisma/client";
+import { db, MOCK_MEMORIES, MOCK_USERS } from "@/lib/mock-data";
 import { LocalFileService } from "./localFileService";
-
-const prisma = new PrismaClient();
 
 export const MemoryService = {
     /**
      * Create a new memory.
      */
     async create(userId, data, file) {
-        const user = await prisma.user.findUnique({ where: { id: parseInt(userId) } });
-        if (!user.couple_id) throw new Error("USER_NOT_PAIRED");
+        const user = MOCK_USERS.find(u => u.id === parseInt(userId));
+        if (!user || !user.couple_id) throw new Error("USER_NOT_PAIRED");
 
         let imagePath = null;
         if (file) {
             imagePath = await LocalFileService.upload(file);
         }
 
-        return await prisma.memory.create({
+        return await db.memory.create({
             data: {
                 couple_id: user.couple_id,
                 title: data.title,
                 description: data.description,
                 memory_date: new Date(data.memory_date),
                 image_path: imagePath,
-                tags: data.tags // Assuming string/JSON
+                tags: data.tags
             }
         });
     },
 
     /**
-     * List memories for the user's couple.
-     */
-    /**
      * List memories for the user's couple with filtering and sorting.
      */
     async list(userId, { page = 1, limit = 10, search = "", tag = "", sort = "date_desc" } = {}) {
-        const user = await prisma.user.findUnique({ where: { id: parseInt(userId) } });
-        if (!user.couple_id) return { data: [], total: 0 };
+        const user = MOCK_USERS.find(u => u.id === parseInt(userId));
+        if (!user || !user.couple_id) return { data: [], total: 0 };
 
-        const skip = (page - 1) * limit;
+        let memories = MOCK_MEMORIES.filter(m => m.couple_id === user.couple_id);
 
-        // Build where clause
-        const where = {
-            couple_id: user.couple_id,
-            AND: []
-        };
-
+        // Search
         if (search) {
-            where.AND.push({
-                OR: [
-                    { title: { contains: search } },
-                    { description: { contains: search } }
-                ]
-            });
+            const lowerSearch = search.toLowerCase();
+            memories = memories.filter(m =>
+                m.title.toLowerCase().includes(lowerSearch) ||
+                m.description.toLowerCase().includes(lowerSearch)
+            );
         }
 
+        // Tag
         if (tag) {
-            where.AND.push({
-                tags: { contains: tag }
-            });
+            memories = memories.filter(m => m.tags && m.tags.includes(tag));
         }
 
-        // Build order by
-        let orderBy = {};
-        switch (sort) {
-            case 'date_asc':
-                orderBy = { memory_date: 'asc' };
-                break;
-            case 'title':
-                orderBy = { title: 'asc' };
-                break;
-            case 'date_desc':
-            default:
-                orderBy = { memory_date: 'desc' };
-                break;
-        }
+        // Sort
+        memories.sort((a, b) => {
+            const dateA = new Date(a.memory_date);
+            const dateB = new Date(b.memory_date);
 
-        const [data, total] = await Promise.all([
-            prisma.memory.findMany({
-                where,
-                orderBy,
-                skip,
-                take: limit,
-            }),
-            prisma.memory.count({ where })
-        ]);
+            if (sort === 'date_asc') return dateA - dateB;
+            if (sort === 'title') return a.title.localeCompare(b.title);
+            return dateB - dateA; // default date_desc
+        });
+
+        const total = memories.length;
+        const start = (page - 1) * limit;
+        const data = memories.slice(start, start + limit);
 
         return { data, total, page, limit, totalPages: Math.ceil(total / limit) };
     }

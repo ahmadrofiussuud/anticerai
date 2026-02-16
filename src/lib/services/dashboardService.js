@@ -1,13 +1,11 @@
-import { PrismaClient } from "@prisma/client";
-
-const prisma = new PrismaClient();
+import { db, MOCK_USERS, MOCK_ENERGY_LOGS, MOCK_DAILY_LOGS } from "@/lib/mock-data";
 
 export const DashboardService = {
     /**
      * Log energy level for a user.
      */
     async logEnergy(userId, level, note) {
-        return await prisma.energyLog.create({
+        return await db.energyLog.create({
             data: {
                 user_id: parseInt(userId),
                 energy_level: parseInt(level),
@@ -20,47 +18,34 @@ export const DashboardService = {
      * Get latest energy logs for the couple (User + Partner).
      */
     async getLatestEnergy(userId) {
-        const user = await prisma.user.findUnique({
-            where: { id: parseInt(userId) },
-            include: { couple: { include: { users: true } } },
-        });
+        const uid = parseInt(userId);
+        const user = MOCK_USERS.find(u => u.id === uid);
 
-        if (!user.couple) {
-            // Return only user's log if not paired
-            const userLog = await prisma.energyLog.findFirst({
-                where: { user_id: parseInt(userId) },
-                orderBy: { createdAt: 'desc' },
-            });
-            return { user: userLog, partner: null };
+        if (!user) return { user: null, partner: null };
+
+        // Find partner
+        let partner = null;
+        if (user.couple_id) {
+            partner = MOCK_USERS.find(u => u.couple_id === user.couple_id && u.id !== uid);
         }
 
-        // Get both logs
-        // Assuming couple.users has 2 users.
-        const partner = user.couple.users.find(u => u.id !== user.id);
+        // Helper to get latest log
+        const getLatest = (id) => {
+            const logs = MOCK_ENERGY_LOGS.filter(l => l.user_id === id);
+            return logs.sort((a, b) => b.createdAt - a.createdAt)[0] || null;
+        };
 
-        const [userLog, partnerLog] = await Promise.all([
-            prisma.energyLog.findFirst({
-                where: { user_id: user.id },
-                orderBy: { createdAt: 'desc' },
-            }),
-            partner ? prisma.energyLog.findFirst({
-                where: { user_id: partner.id },
-                orderBy: { createdAt: 'desc' },
-            }) : null,
-        ]);
-
-        return { user: userLog, partner: partnerLog };
+        return {
+            user: getLatest(uid),
+            partner: partner ? getLatest(partner.id) : null
+        };
     },
 
     /**
      * Log daily activity/strain.
      */
     async logDaily(userId, strain, note) {
-        // Check if already logged today? 
-        // Laravel logic usually allows update or one per day. 
-        // We'll assume one per day for simplicity or just create new.
-        // Let's create new for now.
-        return await prisma.dailyLog.create({
+        return await db.dailyLog.create({
             data: {
                 user_id: parseInt(userId),
                 strain_level: parseInt(strain),
@@ -73,20 +58,16 @@ export const DashboardService = {
      * Get today's daily log.
      */
     async getDailyLogToday(userId) {
+        const uid = parseInt(userId);
         const startOfDay = new Date();
         startOfDay.setHours(0, 0, 0, 0);
 
         const endOfDay = new Date();
         endOfDay.setHours(23, 59, 59, 999);
 
-        return await prisma.dailyLog.findFirst({
-            where: {
-                user_id: parseInt(userId),
-                createdAt: {
-                    gte: startOfDay,
-                    lte: endOfDay,
-                },
-            },
-        });
+        // Find log created today
+        return MOCK_DAILY_LOGS.find(log => {
+            return log.user_id === uid && log.createdAt >= startOfDay && log.createdAt <= endOfDay;
+        }) || null;
     }
 };

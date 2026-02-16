@@ -1,12 +1,9 @@
 'use server';
 
 import { signIn, signOut } from '@/auth';
-import { PrismaClient } from '@prisma/client';
-import bcrypt from 'bcryptjs';
 import { AuthError } from 'next-auth';
 import { z } from 'zod';
-
-const prisma = new PrismaClient();
+import { db } from '@/lib/mock-data';
 
 const loginSchema = z.object({
     email: z.string().email(),
@@ -61,15 +58,13 @@ export async function register(prevState, formData) {
     const { name, email, password } = validatedFields.data;
 
     try {
-        const existingUser = await prisma.user.findUnique({
+        const existingUser = await db.user.findUnique({
             where: { email },
         });
 
         if (existingUser) {
             return { error: 'Email already in use.' };
         }
-
-        const hashedPassword = await bcrypt.hash(password, 10);
 
         // Create 10 char pairing code
         const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
@@ -78,13 +73,12 @@ export async function register(prevState, formData) {
             pairing_code += chars.charAt(Math.floor(Math.random() * chars.length));
         }
 
-        await prisma.user.create({
+        await db.user.create({
             data: {
                 name,
                 email,
-                password: hashedPassword,
+                password, // Storing plain text in mock mode 
                 pairing_code,
-                // Laravel's RegisterController might auto-login? NextAuth signIn will handle session.
             },
         });
 

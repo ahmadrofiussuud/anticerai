@@ -1,6 +1,4 @@
-import { PrismaClient } from "@prisma/client";
-
-const prisma = new PrismaClient();
+import { db } from "@/lib/mock-data";
 
 export const InsightService = {
     /**
@@ -9,7 +7,7 @@ export const InsightService = {
      */
     async getDailyInsight() {
         try {
-            const count = await prisma.insight.count();
+            const count = await db.insight.count();
 
             if (count === 0) {
                 return {
@@ -22,7 +20,7 @@ export const InsightService = {
             }
 
             const skip = Math.floor(Math.random() * count);
-            const insight = await prisma.insight.findFirst({
+            const insight = await db.insight.findFirst({
                 skip: skip,
             });
 
