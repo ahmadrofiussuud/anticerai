@@ -3,6 +3,7 @@ import Credentials from "next-auth/providers/credentials"
 import { z } from "zod"
 import { PrismaClient } from "@prisma/client"
 import bcrypt from "bcryptjs"
+import { authConfig } from "./auth.config"
 
 const prisma = new PrismaClient()
 
@@ -19,11 +20,9 @@ async function getUser(email) {
 }
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
-    pages: {
-        signIn: '/login',
-        newUser: '/register',
-    },
+    ...authConfig,
     callbacks: {
+        ...authConfig.callbacks,
         async session({ session, token }) {
             if (token.sub && session.user) {
                 session.user.id = token.sub;
@@ -40,19 +39,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         async jwt({ token }) {
             return token;
         },
-        authorized({ auth, request: { nextUrl } }) {
-            const isLoggedIn = !!auth?.user;
-            const isOnHome = nextUrl.pathname.startsWith('/home');
-            const isOnAuth = nextUrl.pathname.startsWith('/login') || nextUrl.pathname.startsWith('/register');
-
-            if (isOnHome) {
-                if (isLoggedIn) return true;
-                return false; // Redirect unauthenticated users to login page
-            } else if (isOnAuth && isLoggedIn) {
-                return Response.redirect(new URL('/home', nextUrl));
-            }
-            return true;
-        },
+        // We do NOT modify authorized here, we use the one from authConfig
     },
     providers: [
         Credentials({
