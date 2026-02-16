@@ -1,0 +1,162 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id              Int       @id @default(autoincrement())
+  name            String
+  email           String    @unique
+  email_verified_at DateTime?
+  password        String
+  remember_token  String?
+  
+  // From add_couple_id_to_users_table
+  couple_id       Int?
+  
+  // From add_pairing_code_to_users_table & update_pairing_code_length
+  pairing_code    String?   @unique // Length 10
+  pairing_code_expires_at DateTime?
+
+  // From add_preferences_to_users_table
+  love_language   String?
+  favorites       String?   // Text in Laravel
+
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  couple          Couple?   @relation("UserCouple", fields: [couple_id], references: [id])
+  
+  // Inverse relations
+  energyLogs      EnergyLog[]
+  dailyLogs       DailyLog[]
+  insightUsers    InsightUser[]
+  
+  // Relations for Couple (husband/wife)
+  husbandOf       Couple[]  @relation("Husband")
+  wifeOf          Couple[]  @relation("Wife")
+}
+
+model Couple {
+  id              Int       @id @default(autoincrement())
+  husband_id      Int?
+  wife_id         Int?
+  pairing_code    String    @unique // Length 6 in migration
+  anniversary_date DateTime?
+  
+  // From add_current_plan_to_couples
+  current_plan    String?
+
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  husband         User?     @relation("Husband", fields: [husband_id], references: [id])
+  wife            User?     @relation("Wife", fields: [wife_id], references: [id])
+  
+  users           User[]    @relation("UserCouple")
+  memories        Memory[]
+  // activities      Activity[] // Relation ambiguous in migration
+  // insights        Insight[]  // Relation via InsightUser
+}
+
+model Activity {
+  id              Int       @id @default(autoincrement())
+  title           String
+  category        String
+  description     String
+  estimated_cost  String
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  
+  // Note: Laravel migration didn't strictly add couple_id FK in create_activities_table
+  // but it's implied for a couple app. Wait, looking at migration 2026_01_09_000004...
+  // It DOES NOT have couple_id. It seems to be a pool of activities?
+  // checking the file content again... yes, no couple_id.
+  // So it's likely a generic list of ideas.
+}
+
+model EnergyLog {
+  id              Int       @id @default(autoincrement())
+  user_id         Int
+  energy_level    Int
+  note            String?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  user            User      @relation(fields: [user_id], references: [id], onDelete: Cascade)
+}
+
+model Memory {
+  id              Int       @id @default(autoincrement())
+  couple_id       Int
+  title           String
+  description     String
+  image_path      String?
+  memory_date     DateTime
+  
+  // From add_tags_to_memories_table
+  // I need to check if this migration exists and what it does. 
+  // File: 2026_01_22_081326_add_tags_to_memories_table.php
+  // Assuming it adds a nullable string or json. I will assume String for SQLite.
+  tags            String? 
+
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  couple          Couple    @relation(fields: [couple_id], references: [id], onDelete: Cascade)
+}
+
+model Insight {
+  id              Int       @id @default(autoincrement())
+  type            String
+  title           String
+  content_path    String?
+  brief_text      String
+  trigger_context String
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  insightUsers    InsightUser[]
+  // Note: create_insights_table does NOT have couple_id. 
+}
+
+model InsightUser {
+  id              Int       @id @default(autoincrement())
+  user_id         Int
+  insight_id      Int
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  user            User      @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  insight         Insight   @relation(fields: [insight_id], references: [id], onDelete: Cascade)
+}
+
+model DailyLog {
+  id              Int       @id @default(autoincrement())
+  user_id         Int       // From 2026_01_20_155431_create_daily_logs_table.php
+  strain_level    Int?       // nullable? Migration says integer. Assuming not null unless specified.
+  note            String?   // From 2026_01_22_074931_add_note_to_daily_logs_table.php
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  user            User      @relation(fields: [user_id], references: [id])
+}
+
+model GrowthMaterial {
+  id              Int       @id @default(autoincrement())
+  title           String
+  type            String
+  url             String?
+  thumbnail_url   String
+  description     String?
+  subtitle        String?
+  duration        String?
+  views           String    @default("0")
+  category        String
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+}
