@@ -2,7 +2,6 @@
 
 import { useState, useRef, useEffect } from "react";
 import { Loader2, Send, Info, X } from "lucide-react";
-import CareCTACard from "./care/CareCTACard";
 
 export default function ChatInterface() {
     const [messages, setMessages] = useState([
@@ -68,7 +67,7 @@ export default function ChatInterface() {
     };
 
     return (
-        <div className="bg-white rounded-3xl shadow-xl border border-[#E5E0D0] overflow-hidden relative" style={{ height: "calc(100vh - 280px)" }}>
+        <div className="bg-white overflow-hidden relative" style={{ height: "600px" }}>
             {/* Subtle Interior Pattern */}
             <div className="absolute inset-0 opacity-[0.35] pointer-events-none bg-repeat bg-[length:400px]"
                 style={{ backgroundImage: "url('https://images.unsplash.com/photo-1574169208507-84376144848b?q=80&w=2079&auto=format&fit=crop')" }}>
@@ -76,7 +75,7 @@ export default function ChatInterface() {
 
             <div className="h-full flex flex-col relative z-10">
                 {/* Messages Area */}
-                <div className="flex-1 overflow-y-auto p-6 space-y-6">
+                <div className="flex-1 overflow-y-auto p-6 space-y-4">
                     {messages.map((msg, idx) => {
                         // ... existing message mapping
                         if (msg.type === 'user') {
@@ -98,13 +97,6 @@ export default function ChatInterface() {
                                             <div className="text-xs font-bold mb-1 text-[#B5C4B5]">Amora AI</div>
                                             <div className="text-sm leading-relaxed">{msg.content}</div>
                                         </div>
-
-                                        {/* Proactive Bridge Care Suggestion if it might be useful (simulated after a few messages) */}
-                                        {idx === messages.length - 1 && messages.length > 5 && (
-                                            <div className="mt-8 max-w-sm">
-                                                <CareCTACard />
-                                            </div>
-                                        )}
                                     </div>
                                 </div>
                             );
@@ -132,13 +124,6 @@ export default function ChatInterface() {
                     )}
                     <div ref={messagesEndRef} />
                 </div>
-
-                {/* Bridge Care Promotion (Horizontal banner style when list is empty) */}
-                {messages.length < 3 && (
-                    <div className="px-6 pb-6 mt-[-1rem]">
-                        <CareCTACard />
-                    </div>
-                )}
 
                 {/* NVC Guide Button */}
                 <div className="px-6 py-3 border-t border-[#E5E0D0]">

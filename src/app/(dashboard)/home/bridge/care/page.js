@@ -55,98 +55,128 @@ export default function BridgeCarePage() {
     );
 
     return (
-        <div className="min-h-screen bg-[#FDFBF7] pb-20 pt-8 selection:bg-[#C67C5C]/20">
-            <div className="max-w-[1200px] mx-auto px-6 sm:px-10">
+        <div className="min-h-screen bg-[#FDFBF7] pb-24 selection:bg-[#C67C5C]/10 antialiased">
+            <div className="max-w-6xl mx-auto px-6 py-8 space-y-10">
 
-                {/* Compact Header */}
-                <div className="flex flex-col gap-4 mb-12">
-                    <Link
-                        href="/home/bridge"
-                        className="inline-flex items-center gap-2 text-sm font-bold text-[#6B7C6B] hover:text-[#2A3C2A] transition-all group"
-                    >
-                        <ArrowLeft className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform" />
-                        Kembali ke Bridge
-                    </Link>
-                    <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
-                        <div>
-                            <h1 className="text-4xl font-serif font-bold text-[#2A3C2A] tracking-tight">Bridge Care</h1>
-                            <p className="text-[#6B7C6B] font-medium mt-1">Pendampingan 60 menit untuk bantu komunikasi lebih jelas dan aman.</p>
+                {/* Compact Header Row */}
+                <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+                    <div className="space-y-1">
+                        <div className="flex items-center gap-2 text-[11px] font-medium text-[#6B7C6B]">
+                            <Link href="/home/bridge" className="hover:text-[#2A3C2A] transition-colors">Bridge</Link>
+                            <span className="opacity-30">/</span>
+                            <span className="text-[#2A3C2A]">Care</span>
                         </div>
+                        <h1 className="text-3xl font-serif font-bold text-[#2A3C2A] tracking-tight">Bridge Care</h1>
+                        <p className="text-sm text-[#6B7C6B] font-medium">Sesi 60 menit bersama mediator untuk bantu komunikasi lebih jelas.</p>
+                    </div>
+                    <div className="flex items-center gap-4">
+                        <button className="text-sm font-semibold text-[#6B7C6B] hover:text-[#2A3C2A] transition-colors">How it works</button>
                         <button
                             onClick={() => setShowBooking(true)}
-                            className="bg-[#2A3C2A] text-white px-8 py-4 rounded-2xl font-bold text-sm shadow-xl shadow-[#2A3C2A]/10 hover:bg-[#384F38] transition-all flex items-center gap-2"
+                            className="h-11 px-6 bg-[#C67C5C] text-white rounded-full font-bold text-sm shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all active:scale-95 whitespace-nowrap"
                         >
-                            <Plus className="w-4 h-4" />
-                            Book New Session
+                            Book Session
                         </button>
                     </div>
                 </div>
 
-                {/* Safety Disclaimer */}
-                <div className="bg-[#FFF3CD]/30 border border-[#FFE69C] p-4 rounded-2xl mb-12 flex items-start gap-3">
-                    <ShieldAlert className="w-5 h-5 text-[#856404] shrink-0" />
-                    <p className="text-[11px] text-[#856404] font-medium leading-relaxed">
-                        **Bukan layanan darurat.** Jika ada kekerasan atau ancaman keselamatan fisik/mental, mohon segera hubungi layanan darurat setempat atau psikolog klinis terdekat. Bridge Care bersifat fasilitasi komunikasi, bukan penanganan krisis.
-                    </p>
+                {/* Slim Safety Banner */}
+                <div className="flex items-center justify-between px-4 py-3 bg-white border border-black/5 rounded-2xl shadow-sm">
+                    <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 bg-[#FDFBF7] rounded-lg border border-black/[0.03] flex items-center justify-center shrink-0">
+                            <ShieldAlert className="w-4 h-4 text-[#C67C5C]" />
+                        </div>
+                        <p className="text-[12px] text-[#2A3C2A] font-medium leading-none">
+                            Bukan layanan darurat. Jika butuh bantuan segera, hubungi 112.
+                        </p>
+                    </div>
+                    <button className="text-[11px] font-bold text-[#C67C5C] hover:underline underline-offset-4 tracking-tight">Learn more</button>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-12">
+                {/* Main Bento Grid */}
+                <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
 
-                    {/* Left: Active Care & Stats */}
-                    <div className="md:col-span-12 lg:col-span-4 space-y-8">
-                        <UpcomingSessionCard session={upcomingSession} />
-
-                        <div className="bg-white rounded-3xl p-8 border border-black/5 shadow-sm">
-                            <h3 className="text-lg font-serif font-bold text-[#2A3C2A] mb-6">Informasi Layanan</h3>
-                            <div className="space-y-4">
-                                <div className="flex items-start gap-4">
-                                    <div className="w-8 h-8 bg-[#FDFBF7] rounded-lg flex items-center justify-center text-[#2A3C2A] shrink-0">
-                                        <Info className="w-4 h-4" />
-                                    </div>
-                                    <p className="text-[11px] text-[#6B7C6B] font-medium leading-relaxed">
-                                        Seluruh ringkasan sesi bersifat privat antara Anda, pasangan, dan mediator. Data dapat Anda hapus kapan saja.
-                                    </p>
-                                </div>
-                                <div className="flex items-start gap-4">
-                                    <div className="w-8 h-8 bg-[#FDFBF7] rounded-lg flex items-center justify-center text-[#C67C5C] shrink-0">
-                                        <Heart className="w-4 h-4" />
-                                    </div>
-                                    <p className="text-[11px] text-[#6B7C6B] font-medium leading-relaxed">
-                                        Bridge Care berfokus pada NVC (Non-Violent Communication) untuk membangun jembatan empati.
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
+                    {/* Row A Left: Upcoming Session (7 cols) */}
+                    <div className="md:col-span-7">
+                        <UpcomingSessionCard session={upcomingSession} onReschedule={() => setShowBooking(true)} />
                     </div>
 
-                    {/* Right: History & Health Referral */}
-                    <div className="md:col-span-12 lg:col-span-8 space-y-12">
+                    {/* Row A Right: Session Summary Preview (5 cols) */}
+                    <div className="md:col-span-5">
+                        <SessionSummaryCard summary={summaries[0]} isPreview={true} />
+                    </div>
 
-                        {/* Session Summaries */}
-                        <div>
-                            <div className="flex items-center justify-between mb-8">
-                                <h3 className="text-2xl font-serif font-bold text-[#2A3C2A]">Riwayat Sesi</h3>
-                                <div className="text-[10px] font-bold text-[#6B7C6B] uppercase tracking-widest">{summaries.length} Selesai</div>
-                            </div>
-
+                    {/* Row B Left: Session History (7 cols) */}
+                    <div className="md:col-span-7 space-y-6">
+                        <div className="flex items-center gap-2 mb-2">
+                            <h3 className="text-sm font-bold text-[#2A3C2A]">Riwayat Sesi</h3>
+                            <span className="px-2 py-0.5 bg-black/5 rounded-full text-[10px] font-bold text-[#6B7C6B]">{summaries.length}</span>
+                        </div>
+                        <div className="space-y-4">
                             {summaries.length > 0 ? (
-                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                                    {summaries.map(s => (
-                                        <SessionSummaryCard key={s.id} summary={s} />
-                                    ))}
-                                </div>
+                                summaries.slice(0, 5).map(s => (
+                                    <SessionSummaryCard key={s.id} summary={s} isList={true} />
+                                ))
                             ) : (
-                                <div className="py-20 text-center bg-white border border-dashed border-black/10 rounded-[2.5rem]">
-                                    <p className="text-xs text-[#A0A0A0] font-bold">Belum ada riwayat sesi.</p>
+                                <div className="py-12 text-center bg-white border border-dashed border-black/10 rounded-3xl opacity-50">
+                                    <p className="text-xs text-[#A0A0A0] font-bold">Belum ada riwayat sesi mediasi.</p>
                                 </div>
                             )}
                         </div>
+                    </div>
 
-                        {/* Referral Section */}
-                        <div className="pt-12 border-t border-black/5">
-                            <ReferralSection existingReferrals={referrals} />
+                    {/* Row B Right: Service Details (5 cols) */}
+                    <div className="md:col-span-5">
+                        <div className="bg-white/60 backdrop-blur rounded-3xl border border-black/5 p-6 shadow-sm space-y-6 h-full">
+                            <h3 className="text-sm font-bold text-[#2A3C2A]">Detail Layanan</h3>
+                            <div className="space-y-5">
+                                <div className="flex items-start gap-4">
+                                    <div className="w-8 h-8 bg-black/5 rounded-xl flex items-center justify-center shrink-0">
+                                        <Info className="w-4 h-4 text-[#6B7C6B]" />
+                                    </div>
+                                    <div className="space-y-1">
+                                        <p className="text-[12px] font-bold text-[#2A3C2A]">Privasi Terjamin</p>
+                                        <p className="text-[11px] text-[#6B7C6B] leading-relaxed">Seluruh ringkasan sesi bersifat privat dan terenkripsi.</p>
+                                    </div>
+                                </div>
+                                <div className="flex items-start gap-4">
+                                    <div className="w-8 h-8 bg-black/5 rounded-xl flex items-center justify-center shrink-0">
+                                        <Heart className="w-4 h-4 text-[#6B7C6B]" />
+                                    </div>
+                                    <div className="space-y-1">
+                                        <p className="text-[12px] font-bold text-[#2A3C2A]">Metode NVC</p>
+                                        <p className="text-[11px] text-[#6B7C6B] leading-relaxed">Fokus pada fasilitasi komunikasi berempati.</p>
+                                    </div>
+                                </div>
+                                <div className="flex items-start gap-4">
+                                    <div className="w-8 h-8 bg-black/5 rounded-xl flex items-center justify-center shrink-0">
+                                        <ShieldAlert className="w-4 h-4 text-[#6B7C6B]" />
+                                    </div>
+                                    <div className="space-y-1">
+                                        <p className="text-[12px] font-bold text-[#2A3C2A]">Pengingat Otomatis</p>
+                                        <p className="text-[11px] text-[#6B7C6B] leading-relaxed">Notifikasi otomatis untuk setiap sesi yang terjadwal.</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="pt-6 border-t border-black/5">
+                                <p className="text-[10px] font-bold text-[#6B7C6B] uppercase tracking-wider mb-4">What you'll get</p>
+                                <ul className="space-y-3">
+                                    {['Ringkasan sesi', 'Kesepakatan bersama', 'Next actions langkah nyata'].map((item, i) => (
+                                        <li key={i} className="flex items-center gap-3 text-[11px] font-medium text-[#2A3C2A]">
+                                            <div className="w-1.5 h-1.5 bg-[#C67C5C] rounded-full"></div>
+                                            {item}
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
                         </div>
                     </div>
+                </div>
+
+                {/* Pre-marital Health Check (Full Width Balanced Section) */}
+                <div className="pt-8 border-t border-black/5">
+                    <ReferralSection existingReferrals={referrals} />
                 </div>
             </div>
 
