@@ -125,6 +125,47 @@ export const MOCK_INSIGHTS = [
     }
 ];
 
+export const MOCK_CARE_BOOKINGS = [
+    {
+        id: 1,
+        userId: 1,
+        coupleId: 1,
+        goal: 'Komunikasi buntu',
+        scheduledAt: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000), // 2 days from now
+        durationMinutes: 60,
+        price: 150000,
+        status: 'confirmed',
+        meetLink: 'https://meet.google.com/abc-defg-hij',
+        createdAt: new Date()
+    }
+];
+
+export const MOCK_CARE_SUMMARIES = [
+    {
+        id: 1,
+        bookingId: 1,
+        createdAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
+        summaryText: "Sesi berjalan lancar dengan fokus pada pembagian beban kerja rumah tangga.",
+        keyPoints: ["Merasa kurang dihargai", "Butuh waktu istirahat lebih"],
+        agreements: ["Adam akan mencuci piring setiap malam", "Eve akan menangani belanja mingguan"],
+        nextActions: [
+            { id: 1, task: "Review pembagian tugas di akhir minggu", completed: false }
+        ]
+    }
+];
+
+export const MOCK_REFERRAL_REQUESTS = [
+    {
+        id: 1,
+        userId: 1,
+        partnerType: 'lab',
+        partnerName: 'Bio-Amora Lab',
+        referralCode: 'AMORA-CHECK-88',
+        status: 'booked',
+        createdAt: new Date()
+    }
+];
+
 // Helper functions to simulate DB calls
 export const db = {
     user: {
@@ -229,6 +270,43 @@ export const db = {
             const newLog = { ...data, id: MOCK_ACTIVITY_LOGS.length + 1, occurred_at: new Date() };
             MOCK_ACTIVITY_LOGS.push(newLog);
             return newLog;
+        }
+    },
+    careBooking: {
+        findMany: async ({ where }) => {
+            return MOCK_CARE_BOOKINGS.filter(b => b.userId === where.userId || b.userId === 1);
+        },
+        create: async ({ data }) => {
+            const newBooking = { ...data, id: MOCK_CARE_BOOKINGS.length + 1, createdAt: new Date() };
+            MOCK_CARE_BOOKINGS.push(newBooking);
+            return newBooking;
+        },
+        update: async ({ where, data }) => {
+            const index = MOCK_CARE_BOOKINGS.findIndex(b => b.id === where.id);
+            if (index !== -1) {
+                MOCK_CARE_BOOKINGS[index] = { ...MOCK_CARE_BOOKINGS[index], ...data };
+                return MOCK_CARE_BOOKINGS[index];
+            }
+            return null;
+        }
+    },
+    careSessionSummary: {
+        findMany: async ({ where }) => {
+            // Complex join logic simulated
+            return MOCK_CARE_SUMMARIES.filter(s => {
+                const booking = MOCK_CARE_BOOKINGS.find(b => b.id === s.bookingId);
+                return booking && (booking.userId === where.userId || 1);
+            });
+        }
+    },
+    referralRequest: {
+        findMany: async ({ where }) => {
+            return MOCK_REFERRAL_REQUESTS.filter(r => r.userId === where.userId || 1);
+        },
+        create: async ({ data }) => {
+            const newRequest = { ...data, id: MOCK_REFERRAL_REQUESTS.length + 1, createdAt: new Date() };
+            MOCK_REFERRAL_REQUESTS.push(newRequest);
+            return newRequest;
         }
     }
 };

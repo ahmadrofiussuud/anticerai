@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import { Loader2, Send, Info, X } from "lucide-react";
+import CareCTACard from "./care/CareCTACard";
 
 export default function ChatInterface() {
     const [messages, setMessages] = useState([
@@ -75,8 +76,9 @@ export default function ChatInterface() {
 
             <div className="h-full flex flex-col relative z-10">
                 {/* Messages Area */}
-                <div className="flex-1 overflow-y-auto p-6 space-y-4">
+                <div className="flex-1 overflow-y-auto p-6 space-y-6">
                     {messages.map((msg, idx) => {
+                        // ... existing message mapping
                         if (msg.type === 'user') {
                             return (
                                 <div key={idx} className="flex justify-end">
@@ -96,6 +98,13 @@ export default function ChatInterface() {
                                             <div className="text-xs font-bold mb-1 text-[#B5C4B5]">Amora AI</div>
                                             <div className="text-sm leading-relaxed">{msg.content}</div>
                                         </div>
+
+                                        {/* Proactive Bridge Care Suggestion if it might be useful (simulated after a few messages) */}
+                                        {idx === messages.length - 1 && messages.length > 5 && (
+                                            <div className="mt-8 max-w-sm">
+                                                <CareCTACard />
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
                             );
@@ -123,6 +132,13 @@ export default function ChatInterface() {
                     )}
                     <div ref={messagesEndRef} />
                 </div>
+
+                {/* Bridge Care Promotion (Horizontal banner style when list is empty) */}
+                {messages.length < 3 && (
+                    <div className="px-6 pb-6 mt-[-1rem]">
+                        <CareCTACard />
+                    </div>
+                )}
 
                 {/* NVC Guide Button */}
                 <div className="px-6 py-3 border-t border-[#E5E0D0]">
