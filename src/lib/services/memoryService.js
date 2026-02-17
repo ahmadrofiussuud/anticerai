@@ -14,7 +14,7 @@ export const MemoryService = {
             imagePath = await LocalFileService.upload(file);
         }
 
-        return await db.memory.create({
+        const memory = await db.memory.create({
             data: {
                 couple_id: user.couple_id,
                 title: data.title,
@@ -24,6 +24,16 @@ export const MemoryService = {
                 tags: data.tags
             }
         });
+
+        // Award XP
+        try {
+            const { rewardService } = await import("./rewardService");
+            await rewardService.awardXP(user.couple_id, 'NOSTALGIA_ENTRY', `Memory: ${data.title}`);
+        } catch (xpError) {
+            console.error("Failed to award XP for memory:", xpError);
+        }
+
+        return memory;
     },
 
     /**

@@ -26,5 +26,14 @@ export const RouletteService = {
             by: ['category'],
         });
         return categories.map(c => c.category);
+    },
+
+    async completeActivity(userId, activityId, title) {
+        const { db, MOCK_USERS } = await import("../mock-data");
+        const user = MOCK_USERS.find(u => u.id === parseInt(userId));
+        if (!user || !user.couple_id) return null;
+
+        const { rewardService } = await import("./rewardService");
+        return await rewardService.awardXP(user.couple_id, 'DATE_COMPLETED', `Completed Date: ${title}`);
     }
 };

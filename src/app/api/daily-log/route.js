@@ -34,6 +34,18 @@ export async function POST(req) {
         }
 
         const log = await DashboardService.logDaily(session.user.id, validated.data.strain_level, validated.data.note);
+
+        // Award XP
+        try {
+            const { rewardService } = await import("@/lib/services/rewardService");
+            const user = await db.user.findUnique({ where: { id: session.user.id } });
+            if (user && user.couple_id) {
+                await rewardService.awardXP(user.couple_id, 'DAILY_LOG', 'Daily Log Entry');
+            }
+        } catch (xpError) {
+            console.error("Failed to award XP:", xpError);
+        }
+
         return NextResponse.json(log);
     } catch (error) {
         return NextResponse.json({ error: error.message }, { status: 500 });

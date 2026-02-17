@@ -32,6 +32,7 @@ export default function Header() {
         { href: "/home/nostalgia", label: "Nostalgia", active: pathname.includes("nostalgia") },
         { href: "/home/bridge", label: "Bridge", active: pathname.includes("bridge") },
         { href: "/home/date-roulette", label: "Date Roulette", active: pathname.includes("date-roulette") },
+        { href: "/home/rewards", label: "Rewards", active: pathname.includes("rewards") },
         { href: "/home/growth-space", label: "Growth Space", active: pathname.includes("growth-space") },
     ];
 

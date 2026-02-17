@@ -48,6 +48,44 @@ export const MOCK_DAILY_LOGS = [
 ];
 
 // Requested Additional Mock Data (Students/Teachers/Journals)
+export const MOCK_RELATIONSHIP_PROFILES = [
+    {
+        id: 1,
+        couple_id: 1,
+        xp: 120,
+        streak_days: 12,
+        level: 'Bronze',
+        created_at: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000), // 15 days ago
+        anniversary_date: '2025-06-15',
+        partner_birthday: '1995-10-20'
+    }
+];
+
+export const MOCK_VOUCHERS = [
+    {
+        id: 1,
+        couple_id: 1,
+        type: 'level',
+        title: 'Newcomer Bonus',
+        merchant: 'Amora Coffee',
+        percent: 10,
+        status: 'available',
+        category: 'Coffee',
+        expires_at: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
+    }
+];
+
+export const MOCK_ACTIVITY_LOGS = [
+    {
+        id: 1,
+        couple_id: 1,
+        type: 'date',
+        title: 'Dinner at Blue Lagoon',
+        xp_awarded: 30,
+        occurred_at: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000)
+    }
+];
+
 export const MOCK_STUDENTS = [
     { id: 1, name: 'Alice', grade: '10A', status: 'Active' },
     { id: 2, name: 'Bob', grade: '10B', status: 'At Risk' }
@@ -147,5 +185,50 @@ export const db = {
     insight: {
         count: async () => MOCK_INSIGHTS.length,
         findFirst: async ({ skip }) => MOCK_INSIGHTS[skip || 0] || null
+    },
+    relationshipProfile: {
+        findUnique: async ({ where }) => {
+            return MOCK_RELATIONSHIP_PROFILES.find(p => p.couple_id === where.couple_id) || null;
+        },
+        update: async ({ where, data }) => {
+            const index = MOCK_RELATIONSHIP_PROFILES.findIndex(p => p.couple_id === where.couple_id);
+            if (index !== -1) {
+                MOCK_RELATIONSHIP_PROFILES[index] = { ...MOCK_RELATIONSHIP_PROFILES[index], ...data };
+                return MOCK_RELATIONSHIP_PROFILES[index];
+            }
+            return null;
+        }
+    },
+    voucher: {
+        findMany: async ({ where }) => {
+            return MOCK_VOUCHERS.filter(v => v.couple_id === where.couple_id);
+        },
+        create: async ({ data }) => {
+            const newVoucher = { ...data, id: MOCK_VOUCHERS.length + 1 };
+            MOCK_VOUCHERS.push(newVoucher);
+            return newVoucher;
+        },
+        update: async ({ where, data }) => {
+            const index = MOCK_VOUCHERS.findIndex(v => v.id === where.id);
+            if (index !== -1) {
+                MOCK_VOUCHERS[index] = { ...MOCK_VOUCHERS[index], ...data };
+                return MOCK_VOUCHERS[index];
+            }
+            return null;
+        }
+    },
+    activityLog: {
+        findMany: async ({ where }) => {
+            let logs = MOCK_ACTIVITY_LOGS.filter(a => a.couple_id === where.couple_id);
+            if (where.occurred_at && where.occurred_at.gte) {
+                logs = logs.filter(l => l.occurred_at >= where.occurred_at.gte);
+            }
+            return logs;
+        },
+        create: async ({ data }) => {
+            const newLog = { ...data, id: MOCK_ACTIVITY_LOGS.length + 1, occurred_at: new Date() };
+            MOCK_ACTIVITY_LOGS.push(newLog);
+            return newLog;
+        }
     }
 };

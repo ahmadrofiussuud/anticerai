@@ -11,6 +11,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import HeroCarousel from "@/components/features/home/HeroCarousel";
 import FloatingAction from "@/components/features/home/FloatingAction";
+import RewardsCard from "@/components/features/home/RewardsCard";
 
 export default function HomePage() {
     const { data: session, status } = useSession();
@@ -87,6 +88,11 @@ export default function HomePage() {
                     {/* Daily Log */}
                     <div className="lg:col-span-4">
                         <DailyLog />
+                    </div>
+
+                    {/* Rewards Card */}
+                    <div className="lg:col-span-4">
+                        <RewardsCard />
                     </div>
 
                     {/* Partnership Playbook (P0) */}
