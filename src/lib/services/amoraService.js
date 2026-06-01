@@ -10,7 +10,7 @@ export const AmoraService = {
      */
     async interpret(userText) {
         try {
-            const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+            const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
             const prompt = `
         Role: Amora, a relationship mediator and NVC (Non-Violent Communication) expert.
         Task: Analyze the following user complaint/situation.
@@ -51,7 +51,7 @@ export const AmoraService = {
      */
     async spark() {
         try {
-            const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+            const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
             const prompt = `
         Role: Amora, a creative romance guide.
         Task: Generate a "Daily Spark" - a small, easy-to-do gesture to surprise a partner.
@@ -91,7 +91,7 @@ export const AmoraService = {
             const apiKey = process.env.GEMINI_API_KEY;
             console.log("AmoraService: API Key check:", apiKey ? "Present (Starts with " + apiKey.substring(0, 4) + ")" : "Missing");
 
-            const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+            const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
             // Convert history to Gemini format if needed, but for now we essentially send context
             // A simple approach is to append the history to the prompt or use chat session.
@@ -148,7 +148,7 @@ export const AmoraService = {
      */
     async generateDateIdea({ mood, budget, location, atmosphere }) {
         try {
-            const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+            const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
             const prompt = `
                 Role: Amora, a creative date planner.
                 Task: Generate a unique date night idea based on these preferences:
