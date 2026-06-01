@@ -270,6 +270,25 @@ function FeatureLinks() {
                     </div>
                 </div>
             </Link>
+
+            {/* Care Sync (New Feature) */}
+            <Link href="/home/care-sync" className="group relative rounded-[2rem] overflow-hidden shadow-lg h-[400px] md:col-span-2 cursor-pointer transform transition-all duration-700 ease-out hover:shadow-2xl">
+                <img src="https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=1600&h=600&fit=crop"
+                    alt="Care Sync"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-[1.5s]" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity"></div>
+                <div className="absolute inset-0 p-8 flex flex-col justify-end text-white">
+                    <div className="transform transition-transform duration-500 group-hover:translate-y-[-10px]">
+                        <span className="bg-[#C67C5C] text-xs font-bold uppercase tracking-widest px-3 py-1 rounded-full mb-3 inline-block">New Feature</span>
+                        <h3 className="text-4xl font-serif font-bold mb-2">Care Sync</h3>
+                        <p className="text-white/80 mb-4 max-w-2xl text-lg">Sinkronisasikan jadwal harian Anda dan dapatkan saran perhatian pintar berbasis AI untuk menyambut pasangan Anda pulang.</p>
+                        <div className="flex items-center text-sm font-bold uppercase tracking-widest text-[#F4A460] opacity-0 group-hover:opacity-100 transition-all duration-500 translate-y-4 group-hover:translate-y-0">
+                            <span>Mulai Sinkronisasi</span>
+                            <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                        </div>
+                    </div>
+                </div>
+            </Link>
         </div>
     )
 }
