@@ -46,6 +46,8 @@ export default function ChatInterface() {
         e.preventDefault();
         if (!input.trim() || isLoading) return;
 
+        console.log("💬 [ChatInterface] User sending message:", input);
+
         const userMsg = { type: "user", content: input };
         setMessages((prev) => [...prev, userMsg]);
         setInput("");
@@ -55,6 +57,11 @@ export default function ChatInterface() {
             // Prepare history for API (excluding system message if needed, or keeping it depending on backend)
             // The backend handles the system prompt, so we just send the chat log.
             const history = messages.filter(m => m.type !== 'system');
+
+            console.log("✈️ [ChatInterface] POST Payload to /api/bridge/chat:", {
+                message: input,
+                history: history
+            });
 
             const res = await fetch("/api/bridge/chat", {
                 method: "POST",
@@ -66,19 +73,21 @@ export default function ChatInterface() {
             });
 
             const data = await res.json();
+            console.log("📥 [ChatInterface] Received response data:", data);
 
             if (data.error) {
-                console.error("API Error:", data.error);
+                console.error("❌ [ChatInterface] API Error Response:", data.error);
                 // Fallback message
                 setMessages((prev) => [...prev, { type: "amora", content: "Maaf, saya sedang mengalami gangguan koneksi. Mohon coba lagi nanti." }]);
             } else {
+                console.log("✨ [ChatInterface] AI Reply:", data.reply);
                 setMessages((prev) => [...prev, { type: "amora", content: data.reply }]);
             }
 
             setIsLoading(false);
 
         } catch (error) {
-            console.error("Chat error:", error);
+            console.error("💥 [ChatInterface] Catch Chat error:", error);
             setMessages((prev) => [...prev, { type: "amora", content: "Maaf, terjadi kesalahan pada sistem." }]);
             setIsLoading(false);
         }
