@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { Loader2, Send, Info, X } from "lucide-react";
+import { Loader2, Send, Info, X, Trash } from "lucide-react";
 
 export default function ChatInterface() {
     const [messages, setMessages] = useState([
@@ -20,7 +20,25 @@ export default function ChatInterface() {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
     };
 
+    // Load messages from localStorage on mount
     useEffect(() => {
+        if (typeof window !== "undefined") {
+            const saved = localStorage.getItem("amora_bridge_chats");
+            if (saved) {
+                try {
+                    setMessages(JSON.parse(saved));
+                } catch (e) {
+                    console.error("Failed to load chats from localStorage:", e);
+                }
+            }
+        }
+    }, []);
+
+    // Save messages to localStorage when updated
+    useEffect(() => {
+        if (typeof window !== "undefined" && messages.length > 1) {
+            localStorage.setItem("amora_bridge_chats", JSON.stringify(messages));
+        }
         scrollToBottom();
     }, [messages]);
 
@@ -138,6 +156,24 @@ export default function ChatInterface() {
                 {/* Input Area */}
                 <div className="p-4 bg-[#FDFBF7]">
                     <form onSubmit={handleSendMessage} className="flex gap-3">
+                        <button
+                            type="button"
+                            onClick={() => {
+                                if (confirm("Apakah Anda yakin ingin menghapus semua riwayat chat ini?")) {
+                                    setMessages([
+                                        {
+                                            type: "system",
+                                            content: "Selamat datang di Invisible Bridge. Ceritakan apa yang kamu rasakan, aku siap mendengarkan dan membantu mencari solusi psikologis untuk hubunganmu."
+                                        }
+                                    ]);
+                                    localStorage.removeItem("amora_bridge_chats");
+                                }
+                            }}
+                            title="Hapus semua chat"
+                            className="bg-red-50 hover:bg-red-100 text-red-600 w-12 h-12 rounded-full flex items-center justify-center shadow-md transition-all hover:scale-105"
+                        >
+                            <Trash className="w-5 h-5" />
+                        </button>
                         <input
                             type="text"
                             value={input}
